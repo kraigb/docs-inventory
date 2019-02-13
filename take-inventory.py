@@ -12,7 +12,9 @@ terms = [line.rstrip('\n') for line in open('terms.txt')]
 
 import datetime
 today = datetime.date.today()
-result_file = 'results_' + str(today) + '.csv'
+from random import randint
+suffix = '-' + str(randint(1000,9999))
+result_file = 'results_' + str(today) + suffix + '.csv'
 
 print('Opening CSV results file')
 
