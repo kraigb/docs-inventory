@@ -56,7 +56,11 @@ with open(result_file, 'w', newline='', encoding='utf-8') as csv_file:
                     elements = line.split(":", 3)
                     path = elements[0] + ':' + elements[1]
                     line = elements[2]
-                    extract = elements[3].strip()
+
+                    # Strip all leading and trailing whitespace from the extract, along with any
+                    # leading - signs because when Excel imports the .csv file it otherwise treats
+                    # those lines as formulas, inserts an =, and ends up showing "#NAME?" 
+                    extract = elements[3].strip().lstrip("-")
 
                     writer.writerow([docset, path, term, line, extract])
 
