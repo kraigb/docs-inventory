@@ -34,7 +34,7 @@ with open(result_file, 'w', newline='', encoding='utf-8') as csv_file:
         base_url = folder_info[2].strip()
 
         # Use # as a comment in folder.txt; skip the line
-        if (docset == "#"):
+        if (docset.startswith('#')):
             continue
 
         print('Processing ' + docset + ' at ' + folder)
@@ -44,8 +44,7 @@ with open(result_file, 'w', newline='', encoding='utf-8') as csv_file:
             print('Searching ' + docset + ' for ' + term)
 
             text_file = 'text_results\\' + docset + '-' + slugify(term) + '.txt'
-            
-            # command = 'findstr /S /R /N "' + term + '" ' + folder_info[1] + '\*.md > ' + text_file
+                        
             command = 'findstr /S /R /N /I /C:"' + term + '" ' + folder + '\*.md > ' + text_file
 
             print('Running ' + command)
@@ -55,13 +54,22 @@ with open(result_file, 'w', newline='', encoding='utf-8') as csv_file:
             with open(text_file, encoding="utf-8") as f:
                 print('Processing ' + text_file + ' into CSV')
 
+                count = 0
+
                 for line in f:
+                    count = count + 1
+
                     # Each line is <path>:<line>:<extract>. We split using the colon delimeter,
                     # but not after the third occurrence, which should be the : before <extract>.
                     # This avoids splitting the extract. We can then easily join the drive and
                     # path back together. (This is specific to Windows!)
-
                     elements = line.split(":", 3)
+
+                    # Guard against bad lines in the findstr output
+                    if (len(elements) < 3):
+                        print('Line %s contains an error' % (count))
+                        continue;
+
                     path = elements[0] + ':' + elements[1]
                     line = elements[2]
 

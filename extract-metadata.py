@@ -42,6 +42,8 @@ with open(input_file, encoding='utf-8') as f_in:
         
         next(reader)  # Skip the header line        
 
+        count = 0
+
         for row in reader:
             # Most of these variables are just for clarity in the program here
             docset = row[0]
@@ -64,16 +66,20 @@ with open(input_file, encoding='utf-8') as f_in:
                     # the metadata matches, and stopping when we reach the first line that starts
                     # with '#' which is assumed to be the H1.
 
-                    for line in docfile:
-                        # Check for H1 and exit the loop if we find it
-                        if (line.startswith("#")):
-                            # Remove all leading #'s and whitespace 
-                            h1 = line.lstrip("# ")
-                            break
+                    # Guard against encoding issues in files, and print filename to allow for correction.
+                    try:
+                        for line in docfile:                        
+                            # Check for H1 and exit the loop if we find it
+                            if (line.startswith("#")):
+                                # Remove all leading #'s and whitespace 
+                                h1 = line.lstrip("# ")
+                                break
 
-                        for key in metadata_text:
-                            if (line.startswith(metadata_text[key])):
-                                metadata_values[key] = line.split(":", 1)[1].strip()  # Remove metadata tag
+                            for key in metadata_text:
+                                if (line.startswith(metadata_text[key])):
+                                    metadata_values[key] = line.split(":", 1)[1].strip()  # Remove metadata tag
+                    except:
+                        print("Encoding error in " + filename + "; skipping. Open the file directly and check for issues.")
 
                 # At this point, all the metadata_values are set
 
