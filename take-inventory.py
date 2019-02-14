@@ -23,13 +23,19 @@ from slugify import slugify
 with open(result_file, 'w', newline='', encoding='utf-8') as csv_file:
     import csv
     writer = csv.writer(csv_file)
-    writer.writerow(['Docset', 'File', 'Term', 'Line', 'Extract'])
+    writer.writerow(['Docset', 'File', 'URL', 'Term', 'Line', 'Extract'])
 
     for folder_item in folders:
-        # Each line in folders.txt has a label, then a space, so separate these
-        folder_info = folder_item.split(" ", 1)
-        docset = folder_info[0]
-        folder = folder_info[1]
+        # Each line in folders.txt has a label, a path, and a base URL separated by whitespace.
+        # (The "None" arg to split() says "any amount of whitespace is the separator".)
+        folder_info = folder_item.split(None, 2)
+        docset = folder_info[0].strip()
+        folder = folder_info[1].strip()
+        base_url = folder_info[2].strip()
+
+        # Use # as a comment in folder.txt; skip the line
+        if (docset == "#"):
+            continue
 
         print('Processing ' + docset + ' at ' + folder)
 
@@ -37,10 +43,10 @@ with open(result_file, 'w', newline='', encoding='utf-8') as csv_file:
         for term in terms:
             print('Searching ' + docset + ' for ' + term)
 
-            text_file = 'text_results\\' + folder_info[0] + '-' + slugify(term) + '.txt'
-
-            # folder_info [1] is the folder name
-            command = 'findstr /S /R /N "' + term + '" ' + folder_info[1] + '\*.md > ' + text_file
+            text_file = 'text_results\\' + docset + '-' + slugify(term) + '.txt'
+            
+            # command = 'findstr /S /R /N "' + term + '" ' + folder_info[1] + '\*.md > ' + text_file
+            command = 'findstr /S /R /N /I /C:"' + term + '" ' + folder + '\*.md > ' + text_file
 
             print('Running ' + command)
             os.system(command)
@@ -64,7 +70,11 @@ with open(result_file, 'w', newline='', encoding='utf-8') as csv_file:
                     # those lines as formulas, inserts an =, and ends up showing "#NAME?" 
                     extract = elements[3].strip().lstrip("-")
 
-                    writer.writerow([docset, path, term, line, extract])
+                    # Generate the URL from the file path, which just means replacing the folder
+                    # with the base_url, removing ".md", and replacing \\ with /
+                    url = path.replace(folder, base_url).replace('.md', '').replace('\\', '/')
+
+                    writer.writerow([docset, path, url, term, line, extract])
 
 print("Completed first CSV results file, invoking secondary processing to extract metadata")
 

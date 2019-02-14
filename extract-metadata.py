@@ -24,11 +24,11 @@ with open(input_file, encoding='utf-8') as f_in:
     reader = csv.reader(f_in)    
     
     with open(output_file, 'w', encoding='utf-8', newline='') as f_out:
-        # Output file order is docset, file, term, msauthor, author, msdate, mssservice, line,
+        # Output file order is docset, file, URL, term, msauthor, author, msdate, mssservice, line,
         # extract, H1, and title
         
         writer = csv.writer(f_out)
-        writer.writerow(['Docset', 'File', 'Term', 'MSAuthor', 'Author', 'Manager', 'MSDate', 'MSService', 'Line', 'Extract', 'H1', 'Title'])
+        writer.writerow(['Docset', 'File', 'URL', 'Term', 'MSAuthor', 'Author', 'Manager', 'MSDate', 'MSService', 'Line', 'Extract', 'H1', 'Title'])
 
         # As we iterate on the rows in the input file, if the filename is the same as the
         # previous iteration, we use the same metadata values from that iteration to avoid
@@ -49,9 +49,10 @@ with open(input_file, encoding='utf-8') as f_in:
             # Most of these variables are just for clarity in the program here
             docset = row[0]
             filename = row[1]
-            term = row[2]
-            line_number = row[3]
-            extract = row[4]
+            url = row[2]
+            term = row[3]
+            line_number = row[4]
+            extract = row[5]
 
             if (filename == prev_file):
                 # Don't do anything, because the values of the metadata variables are still valid
@@ -75,7 +76,10 @@ with open(input_file, encoding='utf-8') as f_in:
 
                 # At this point, all the metadata_values are set
 
-            writer.writerow([docset, filename, term, metadata_values['msauthor'], metadata_values['author'], metadata_values['manager'], metadata_values['msdate'], metadata_values['msservice'], line_number, extract, h1, metadata_values['title']])
+            writer.writerow([docset, filename, url, term, metadata_values['msauthor'],
+                             metadata_values['author'], metadata_values['manager'],
+                             metadata_values['msdate'], metadata_values['msservice'],
+                             line_number, extract, h1, metadata_values['title']])
 
             prev_file = filename
 
