@@ -14,7 +14,7 @@ elements = input_file.split('.')
 output_file = elements[0] + '-with-metadata.' + elements[1]
 
 def remove_metadata_tag(str):
-    return str.split(":", 1)[1].strip()
+    return 
 
 print("Starting metadata extraction")
 
@@ -22,7 +22,7 @@ with open(input_file, encoding='utf-8') as f_in:
     import csv
     # Input file is assumed to have this order: docset, file, term, line, extract
     reader = csv.reader(f_in)    
-
+    
     with open(output_file, 'w', encoding='utf-8', newline='') as f_out:
         # Output file order is docset, file, term, msauthor, author, msdate, mssservice, line,
         # extract, H1, and title
@@ -35,13 +35,14 @@ with open(input_file, encoding='utf-8') as f_in:
         # the unneeded redundancy.
         prev_file = ''
         
-        title = ''
-        msdate = ''
-        author = ''
-        msauthor = ''      
-        msservice = ''
         h1 = ''
-       
+
+        # The strings we look for to find metadata
+        metadata_text = { 'title' : 'title:', 'msdate' : 'ms.date:', 'author' : 'author:', 'msauthor' : 'ms.author:', 'msservice' : 'ms.service:'}
+        
+        # The metadata values we find, which we carry from row to row
+        metadata_values = { 'title' : '', 'msdate' : '', 'author' : '', 'msauthor' : '', 'msservice' : ''}
+        
         next(reader)  # Skip the header line        
 
         for row in reader:
@@ -62,26 +63,19 @@ with open(input_file, encoding='utf-8') as f_in:
                     # with '#' which is assumed to be the H1.
 
                     for line in docfile:
-                        # Yeah, all this is hard-coded, just to be simple                    
+                        # Check for H1 and exit the loop if we find it
                         if (line.startswith("#")):
-                            h1 = line.lstrip("#").strip()
-                            break  # We're done, exit loop
-                        elif (line.startswith("title:")):
-                            title = remove_metadata_tag(line)
-                        elif (line.startswith("ms.date:")):
-                            msdate = remove_metadata_tag(line)
-                        elif (line.startswith("author:")):
-                            author = remove_metadata_tag(line)
-                        elif (line.startswith("ms.author:")):
-                            msauthor = remove_metadata_tag(line)
-                        elif (line.startswith("ms.service:")):
-                            msservice = remove_metadata_tag(line)
-                        else:
-                            pass  # Ignore the line
+                            # Remove all leading #'s and whitespace 
+                            h1 = line.lstrip("# ")
+                            break
 
-                # At this point, all the metadata values are set
+                        for key in metadata_text:
+                            if (line.startswith(metadata_text[key])):
+                                metadata_values[key] = line.split(":", 1)[1].strip()  # Remove metadata tag
 
-            writer.writerow([docset, filename, term, msauthor, author, msdate, msservice, line_number, extract, h1, title])
+                # At this point, all the metadata_values are set
+
+            writer.writerow([docset, filename, term, metadata_values['msauthor'], metadata_values['author'], metadata_values['msdate'], metadata_values['msservice'], line_number, extract, h1, metadata_values['title']])
 
             prev_file = filename
 

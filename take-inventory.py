@@ -18,6 +18,8 @@ result_file = 'results_' + str(today) + suffix + '.csv'
 
 print('Opening CSV results file')
 
+from slugify import slugify
+
 with open(result_file, 'w', newline='', encoding='utf-8') as csv_file:
     import csv
     writer = csv.writer(csv_file)
@@ -35,10 +37,10 @@ with open(result_file, 'w', newline='', encoding='utf-8') as csv_file:
         for term in terms:
             print('Searching ' + docset + ' for ' + term)
 
-            text_file = 'text_results\\' + folder_info[0] + '-' + term.replace(' ', '-').lower() + '.txt'
+            text_file = 'text_results\\' + folder_info[0] + '-' + slugify(term) + '.txt'
 
             # folder_info [1] is the folder name
-            command = 'findstr /S /L /N "' + term + '" ' + folder_info[1] + '\*.md > ' + text_file
+            command = 'findstr /S /R /N "' + term + '" ' + folder_info[1] + '\*.md > ' + text_file
 
             print('Running ' + command)
             os.system(command)

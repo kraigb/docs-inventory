@@ -2,3 +2,4 @@
 text_results/*.txt
 process.py
 .vscode/*
+.env/*
