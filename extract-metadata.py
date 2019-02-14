@@ -13,9 +13,6 @@ input_file = sys.argv[1]  # File is first argument; [0] is the .py file
 elements = input_file.split('.')
 output_file = elements[0] + '-with-metadata.' + elements[1]
 
-def remove_metadata_tag(str):
-    return 
-
 print("Starting metadata extraction")
 
 with open(input_file, encoding='utf-8') as f_in:
@@ -58,6 +55,10 @@ with open(input_file, encoding='utf-8') as f_in:
                 # Don't do anything, because the values of the metadata variables are still valid
                 pass
             else:
+                # Reset metadata values in case one or more of them aren't present; we don't want previous
+                # values to accidentally carry over.
+                metadata_values = { 'title' : '', 'msdate' : '', 'author' : '', 'msauthor' : '', 'manager' : '', 'msservice' : ''}
+
                 with open(filename, encoding='utf-8') as docfile:
                     # To keep this simple, we read lines from the file and look for
                     # the metadata matches, and stopping when we reach the first line that starts
