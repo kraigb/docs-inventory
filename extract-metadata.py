@@ -28,7 +28,7 @@ with open(input_file, encoding='utf-8') as f_in:
         # extract, H1, and title
         
         writer = csv.writer(f_out)
-        writer.writerow(['Docset', 'File', 'Term', 'MSAuthor', 'Author', 'MSDate', 'MSService', 'Line', 'Extract', 'H1', 'Title'])
+        writer.writerow(['Docset', 'File', 'Term', 'MSAuthor', 'Author', 'Manager', 'MSDate', 'MSService', 'Line', 'Extract', 'H1', 'Title'])
 
         # As we iterate on the rows in the input file, if the filename is the same as the
         # previous iteration, we use the same metadata values from that iteration to avoid
@@ -38,10 +38,10 @@ with open(input_file, encoding='utf-8') as f_in:
         h1 = ''
 
         # The strings we look for to find metadata
-        metadata_text = { 'title' : 'title:', 'msdate' : 'ms.date:', 'author' : 'author:', 'msauthor' : 'ms.author:', 'msservice' : 'ms.service:'}
+        metadata_text = { 'title' : 'title:', 'msdate' : 'ms.date:', 'author' : 'author:', 'msauthor' : 'ms.author:', 'manager' : 'manager:', 'msservice' : 'ms.service:'}
         
         # The metadata values we find, which we carry from row to row
-        metadata_values = { 'title' : '', 'msdate' : '', 'author' : '', 'msauthor' : '', 'msservice' : ''}
+        metadata_values = { 'title' : '', 'msdate' : '', 'author' : '', 'msauthor' : '', 'manager' : '', 'msservice' : ''}
         
         next(reader)  # Skip the header line        
 
@@ -75,7 +75,7 @@ with open(input_file, encoding='utf-8') as f_in:
 
                 # At this point, all the metadata_values are set
 
-            writer.writerow([docset, filename, term, metadata_values['msauthor'], metadata_values['author'], metadata_values['msdate'], metadata_values['msservice'], line_number, extract, h1, metadata_values['title']])
+            writer.writerow([docset, filename, term, metadata_values['msauthor'], metadata_values['author'], metadata_values['manager'], metadata_values['msdate'], metadata_values['msservice'], line_number, extract, h1, metadata_values['title']])
 
             prev_file = filename
 
