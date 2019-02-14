@@ -1,13 +1,13 @@
-To use this tool
+These scripts use the Windows findstr command-line tool and some Python processing to search for terms across multiple documentation repositories. (Repositories are assumed to use the metadata formats for docs.microsoft.com.)
 
-1. Make sure you have Python 3 installed. Download from https://www.python.org/downloads.
+To use this tool:
 
-2. Modify folders.txt to list the local folders you want to search. Each line contains a docset name, a space, then the local path. *.md is appended automatically.
+1. Make sure you have Python 3 installed. Download from [https://www.python.org/downloads](https://www.python.org/downloads).
 
-3. Modify terms.txt to list the terms you want to search. Each line has an individual term and can include spaces.
+2. Modify `folders.txt` to list the local folders you want to search. Each line contains a docset name, a space, then the local path. *.md is appended automatically.
 
-4. Run "python take-inventory.py" and output is in a results_<date>_<random_int>.csv file.
+3. Modify `terms.txt` to list the terms you want to search. Each line has an individual term and can include spaces.
 
-After a run, the text_results folder contains intermediate files from the findstr command line, which are of the form <docset>-<search-term>.txt. These can be deleted once you have the .csv file.
+4. Run "python take-inventory.py" and output is generated in `results_<date>_<random_int>.csv` and `results_<date>_<random_int>-with-metadata.csv` files, the latter of which includes various metadata values extracted from the files in question (see extract-metadata.py, which is invoked at the end of take-inventory.py).
 
-Questions or comments to kraigb.
+Note that after a run, the `text_results` folder contains intermediate files from the findstr command line, which are of the form `<docset>-<search-term>.txt`. These can be deleted once you have the .csv files.

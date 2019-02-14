@@ -64,4 +64,7 @@ with open(result_file, 'w', newline='', encoding='utf-8') as csv_file:
 
                     writer.writerow([docset, path, term, line, extract])
 
-print("Completed CSV results file")
+print("Completed first CSV results file, invoking secondary processing to extract metadata")
+
+import subprocess
+subprocess.call('python extract-metadata.py ' + result_file)
