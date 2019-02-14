@@ -46,7 +46,7 @@ with open(result_file, 'w', newline='', encoding='utf-8') as csv_file:
             os.system(command)
 
             # Now process text results into CSV results
-            with open(text_file, encoding="utf8") as f:
+            with open(text_file, encoding="utf-8") as f:
                 print('Processing ' + text_file + ' into CSV')
 
                 for line in f:
