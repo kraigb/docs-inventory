@@ -54,12 +54,10 @@ with open(result_file, 'w', newline='', encoding='utf-8') as csv_file:
             with open(text_file, encoding="utf-8") as f:
                 print('Processing ' + text_file + ' into CSV')
 
-                count = 0
+                count = 1
 
                 try:
                     for line in f:
-                        count = count + 1
-
                         # Each line is <path>:<line>:<extract>. We split using the colon delimeter,
                         # but not after the third occurrence, which should be the : before <extract>.
                         # This avoids splitting the extract. We can then easily join the drive and
@@ -84,6 +82,7 @@ with open(result_file, 'w', newline='', encoding='utf-8') as csv_file:
                         url = path.replace(folder, base_url).replace('.md', '').replace('\\', '/')
 
                         writer.writerow([docset, path, url, term, line, extract])
+                        count = count + 1
                 except:
                     print("Encoding error in " + text_file + "at line " + count)
 
