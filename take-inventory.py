@@ -84,7 +84,7 @@ with open(result_file, 'w', newline='', encoding='utf-8') as csv_file:
                         writer.writerow([docset, path, url, term, line, extract])
                         count = count + 1
                 except:
-                    print("Encoding error in " + text_file + "at line " + count)
+                    print("Encoding error in %s at line %d" % (text_file, count))
 
 print("Completed first CSV results file, invoking secondary processing to extract metadata")
 
