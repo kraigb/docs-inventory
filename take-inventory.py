@@ -56,33 +56,36 @@ with open(result_file, 'w', newline='', encoding='utf-8') as csv_file:
 
                 count = 0
 
-                for line in f:
-                    count = count + 1
+                try:
+                    for line in f:
+                        count = count + 1
 
-                    # Each line is <path>:<line>:<extract>. We split using the colon delimeter,
-                    # but not after the third occurrence, which should be the : before <extract>.
-                    # This avoids splitting the extract. We can then easily join the drive and
-                    # path back together. (This is specific to Windows!)
-                    elements = line.split(":", 3)
+                        # Each line is <path>:<line>:<extract>. We split using the colon delimeter,
+                        # but not after the third occurrence, which should be the : before <extract>.
+                        # This avoids splitting the extract. We can then easily join the drive and
+                        # path back together. (This is specific to Windows!)
+                        elements = line.split(":", 3)
 
-                    # Guard against bad lines in the findstr output
-                    if (len(elements) < 3):
-                        print('Line %s contains an error' % (count))
-                        continue;
+                        # Guard against bad lines in the findstr output
+                        if (len(elements) < 3):
+                            print('Line %s contains an error' % (count))
+                            continue;
 
-                    path = elements[0] + ':' + elements[1]
-                    line = elements[2]
+                        path = elements[0] + ':' + elements[1]
+                        line = elements[2]
 
-                    # Strip all leading and trailing whitespace from the extract, along with any
-                    # leading - signs because when Excel imports the .csv file it otherwise treats
-                    # those lines as formulas, inserts an =, and ends up showing "#NAME?" 
-                    extract = elements[3].strip().lstrip("-")
+                        # Strip all leading and trailing whitespace from the extract, along with any
+                        # leading - signs because when Excel imports the .csv file it otherwise treats
+                        # those lines as formulas, inserts an =, and ends up showing "#NAME?" 
+                        extract = elements[3].strip().lstrip("-")
 
-                    # Generate the URL from the file path, which just means replacing the folder
-                    # with the base_url, removing ".md", and replacing \\ with /
-                    url = path.replace(folder, base_url).replace('.md', '').replace('\\', '/')
+                        # Generate the URL from the file path, which just means replacing the folder
+                        # with the base_url, removing ".md", and replacing \\ with /
+                        url = path.replace(folder, base_url).replace('.md', '').replace('\\', '/')
 
-                    writer.writerow([docset, path, url, term, line, extract])
+                        writer.writerow([docset, path, url, term, line, extract])
+                except:
+                    print("Encoding error in " + text_file + "at line " + count)
 
 print("Completed first CSV results file, invoking secondary processing to extract metadata")
 
