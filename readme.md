@@ -13,3 +13,5 @@ To use this tool:
 5. Run "python take-inventory.py" and output is generated in `results_<date>_<random_int>.csv` and `results_<date>_<random_int>-with-metadata.csv` files, the latter of which includes various metadata values extracted from the files in question (see extract-metadata.py, which is invoked at the end of take-inventory.py).
 
 Note that after a run, the `text_results` folder contains intermediate files from the findstr command line, which are of the form `<docset>-<search-term>.txt`. These can be deleted once you have the .csv files.
+
+The first time you run a search in a particular folder, the findstr command probably takes a minute or two, depending on the number of files. Subsequent runs, however, will happen much more quickly thanks to Windows' file system caching. This characteristic means that it's very quick and easy to modify search terms and run the tool again...you won't be waiting as long.

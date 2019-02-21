@@ -1,5 +1,13 @@
-*.csv
-text_results/*.txt
-process.py
+# Environment folders
 .vscode/*
 .env/*
+__pycache__/*
+
+# Dev files
+process.py
+folders-test.txt
+terms-test.txt
+
+# Runtime files
+*.csv
+text_results/*.txt

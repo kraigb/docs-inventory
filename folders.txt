@@ -1,4 +1,4 @@
-#AzureDocs           d:\g\azure-docs-pr\articles     https://docs.microsoft.com/azure
-#VSDocs              d:\g\visualstudio-docs-pr\docs  https://docs.microsoft.com/visualstudio
+AzureDocs           d:\g\azure-docs-pr\articles     https://docs.microsoft.com/azure
+VSDocs              d:\g\visualstudio-docs-pr\docs  https://docs.microsoft.com/visualstudio
 #VSCodeDocs          d:\g\vscode-docs\docs           https://code.visualstudio.com/docs
 AzureDevOpsDocs     d:\g\vsts-docs-public\docs      https://docs.microsoft.com/azure/devops
