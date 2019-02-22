@@ -1,0 +1,130 @@
+import http.client, urllib.request, urllib.parse, urllib.error, base64
+import json
+import numpy as np
+
+# Constants
+max_doc_length = 5000
+
+# REPLACE ENDPOINT WITH YOUR OWN
+endpoint = "westus.api.cognitive.microsoft.com";
+
+# REPLACE KEY WITH YOUR OWN!
+headers = {
+    # Request headers
+    'Content-Type': 'application/json',
+    'Ocp-Apim-Subscription-Key': '',
+}
+
+params = urllib.parse.urlencode({
+    })
+
+def get_key_phrases(endpoint, headers, params, body_text):
+    try:
+        conn = http.client.HTTPSConnection(endpoint)
+        conn.request("POST", "/text/analytics/v2.0/keyPhrases?%s" % params, body_text, headers)
+        response = conn.getresponse()
+        data = response.read()        
+        conn.close()
+        return data
+    except Exception as e:
+        print("[Errno {0}] {1}".format(e.errno, e.strerror))
+        return None
+
+
+def split_at_last_paragraph(text, max_length):
+    if (len(text) < max_length):
+        return (text, None)
+    else:
+        # Find the last \n up to max_length
+        pos1 = text.rfind('\n', 0, max_length)
+        
+        # If for some reason there's no new line, just chop at 
+        # the length boundary; we might occasionally lose an important
+        # word here, so we could be more sophisticated if we want, but
+        # this is good enough to start.
+        if (pos1 == -1):
+            pos1 = max_length
+
+        return (text[:pos1], text[(pos1 + 1):])
+
+
+import sys
+input_file = sys.argv[1]  # File is first argument; [0] is the .py file
+
+# Making the output filename assumes the input filename has only one .
+elements = input_file.split('.')
+output_file = elements[0] + '-key-phrases.' + elements[1]
+
+print("extract-key-phrases: Starting key phrase extraction")
+
+with open(input_file, encoding='utf-8') as f_in:
+    import csv
+    # Output CSV has the same structure with added KeyPhrases column
+    reader = csv.reader(f_in) 
+ 
+    csv_headers = next(reader)
+    csv_headers.append("KeyPhrases")
+
+    with open(output_file, 'w', encoding='utf-8', newline='') as f_out:
+        writer = csv.writer(f_out)
+        writer.writerow(csv_headers)
+
+        # Now go through each source file listed in the .csv, and run key phrase extraction.
+        # Cognitive Services has a 5K per "document" limit, which means an item in the JSON
+        # documents collection. There can be 1000 items in the collection.
+        # 
+        # For us, this means reading the file contents, then splitting the text at appropriate
+        # boundaries. For starters, we just do this at the nearest \n to the 5K limit. 
+        
+        for row in reader:
+            filename = row[1]
+
+            if filename == '':
+                continue
+
+            with open(filename, 'r', encoding="utf-8") as f_source:
+                print("extract-key-phrases: Processing %s" % (filename))
+                
+                text = f_source.read()
+
+                # Strip off header by finding position of second "---" 
+                blocks = text.split("---", 2)
+
+                if len(blocks) < 3:
+                    print("extract-key-phrases: Skipping file that appears to have a malformed metadata header, %s" % (filename))
+                    continue;
+
+                # Use just the text past the header
+                text = blocks[2]
+
+                documents = []
+                id = 1                
+
+                while (len(text) > 0):
+                    if len(text) > max_doc_length:
+                        # Find the last \n up to the max length
+                        last_para_pos = text.rfind('\n', 0, max_doc_length)
+                        text_doc = text[:last_para_pos]
+                        text = text[(last_para_pos + 1):]
+                    else:
+                        text_doc = text
+                        text = ''
+                                        
+                    documents.append({ "language": "en", "id": id, "text": text_doc })
+                    id += 1                    
+                
+                body_json = {"documents": documents}
+                data = get_key_phrases(endpoint, headers, params, json.dumps(body_json))
+                data_json = json.loads(data)
+                key_phrases = []
+
+                # Combine the list of key phrases for the documents, which is then the 
+                # key phrases for the source file as a whole.
+                for doc in data_json["documents"]:
+                    key_phrases = sorted(np.unique(key_phrases + doc["keyPhrases"]))
+
+                # Append the phrases list (; separated) to the CSV row and write it.
+                row.append(';'.join(key_phrases))
+                writer.writerow(row)
+
+print("extract-key-phrases: Competed extraction")
