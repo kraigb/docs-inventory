@@ -12,7 +12,7 @@ from utilities import get_next_filename, parse_folders_terms_arguments
 folders_file, terms_file, _ = parse_folders_terms_arguments(sys.argv[1:])
 
 if folders_file == None:
-    print("Usage: python take-inventory --folders <folders_file> --terms <terms_file>")
+    print("Usage: python take-inventory.py --folders <folders_file> --terms <terms_file>")
     sys.exit(2)
 
 # Load the folders and terms from the files
