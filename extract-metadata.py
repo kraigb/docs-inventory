@@ -63,6 +63,7 @@ with open(input_file, encoding='utf-8') as f_in:
                 # Reset metadata values in case one or more of them aren't present; we don't want previous
                 # values to accidentally carry over.
                 metadata_values = { 'title' : '', 'description': '', 'msdate' : '', 'author' : '', 'msauthor' : '', 'manager' : '', 'msservice' : ''}
+                h1 = ''
 
                 with open(filename, encoding='utf-8') as docfile:
                     # To keep this simple, we read lines from the file and look for
@@ -78,6 +79,7 @@ with open(input_file, encoding='utf-8') as f_in:
                             # the metadata, so we make sure we've seen two '---' lines first
                             if line.startswith('---'):
                                 metadata_header_count += 1
+                                continue
                             
                             if line.startswith("#") and metadata_header_count >= 2:
                                 h1 = line.lstrip("# ")  # Remove all leading #'s and whitespace 

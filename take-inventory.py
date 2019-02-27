@@ -74,8 +74,13 @@ for folder_item in folders:
                         print('take-inventory: Line %s contains an error' % (count))
                         continue;
 
+                    # Attach drive letter back to filename
                     path = elements[0] + ':' + elements[1]
                     line = elements[2]
+
+                    # Skip index.md and toc.md/TOC.md
+                    if any(skip_file in path.lower() for skip_file in ["toc.md", "index.md", "index.experimental.md"]):
+                        continue;
 
                     # Strip all leading and trailing whitespace from the extract, along with any
                     # leading - signs because when Excel imports the .csv file it otherwise treats

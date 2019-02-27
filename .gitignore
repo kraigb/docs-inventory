@@ -10,4 +10,5 @@ terms-test.txt
 
 # Runtime files
 *.csv
+*.xls*
 text_results/*.txt
