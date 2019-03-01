@@ -1,0 +1,6 @@
+Visual_Studio >= 2
+(ASPNET + web_app) + Python * (web_app + Django + Flask) >= 2 
+not File.str.contains("whats-new")
+not File.str.contains("archive")
+not File.str.contains("news")
+not File.str.contains("index")
