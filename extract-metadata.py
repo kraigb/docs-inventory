@@ -76,8 +76,9 @@ with open(input_file, encoding='utf-8') as f_in:
 
                         for line in docfile:                        
                             # Check for H1 and exit the loop if we find it. A special case is that some files have # comments in 
-                            # the metadata, so we make sure we've seen two '---' lines first
-                            if line.startswith('---'):
+                            # the metadata, so we make sure we've seen two '---' lines first. We use find instead of
+                            # startswith because some files have non-utf-8 encoding at the beginning; -1 means "not found".
+                            if line.find('---') != -1:
                                 metadata_header_count += 1
                                 continue
                             

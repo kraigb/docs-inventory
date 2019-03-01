@@ -3,10 +3,13 @@
 .env/*
 __pycache__/*
 
-# Dev files
+# Dev and other private files
 process.py
 folders-test.txt
 terms-test.txt
+folders-vs-azure-strategy.txt
+terms-vs-azure-strategy.txt
+filters-vs-azure-strategy.txt
 
 # Runtime files
 *.csv
