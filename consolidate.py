@@ -2,7 +2,12 @@
 # consolidate the entries by filename, making columns for the different terms involved (and count).
 # The terms are loaded from terms.txt and are used to make the columns.
 #
-# Other fields are left as-is
+# The terms are converted into allowable Python identifiers, which must use letters, numbers, and underscores.
+# This conversion is done for the sake of apply-filters.txt, in which you express filters using column names
+# and those names have to be allowable identifiers. Thus we use the make_identifier function in utility.py
+# to produce the column names.
+#
+# Other fields are left as-is.
 #
 # take-inventory.py invokes this script automatically at the end of its processing using the output from
 # extract-metadata.py.
@@ -10,7 +15,7 @@
 # Note that this script depends on the CSV file being sorted by filename, as take-inventory.py produces.
 
 import sys
-from utilities import parse_folders_terms_arguments
+from utilities import parse_folders_terms_arguments, make_identifier
 
 _, terms_file, args = parse_folders_terms_arguments(sys.argv[1:])
 
@@ -54,11 +59,14 @@ with open(input_file, encoding='utf-8') as f_in:
     headers.remove("Line")
     headers.remove("Extract")
 
-    # Insert columns for each of the terms, plus a "Term Total" column
-    for i in range(0, len(terms)):
-        headers.insert(index_term + i, terms[i])        
+    # Insert columns for each of the terms, plus a "Term_Total" column.
+    # All of these columns should be named with valid Python identifiers, which the make_identifier
+    # function guarantees.
 
-    headers.insert(index_term + i + 1, "Term Total")
+    for i in range(0, len(terms)):
+        headers.insert(index_term + i, make_identifier(terms[i]))
+
+    headers.insert(index_term + i + 1, "Term_Total")  # Note underscore in column name
 
     with open(output_file, 'w', encoding='utf-8', newline='') as f_out:        
         writer = csv.writer(f_out)
