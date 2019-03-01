@@ -1,19 +1,35 @@
+# Script to use the Cognitive Services key phrase extraction API to process the contents
+# of source files listed in a CSV file. The input file should be relatively small to minimize
+# service usage (and not exceed free tier limits).
+#
+# Yo provide the endpoint and API key for your specific subscription through command line args.
+
 import http.client, urllib.request, urllib.parse, urllib.error, base64
 import json
 import numpy as np
+import sys
+from utilities import parse_endpoint_key_arguments
 
-# Constants
+# Constants -- this limit is imposed by the API
 max_doc_length = 5000
 
-# REPLACE ENDPOINT WITH YOUR OWN
-endpoint = "westus.api.cognitive.microsoft.com";
+# Get input file arguments, defaulting to folders.txt and terms.txt
+endpoint, key, args = parse_endpoint_key_arguments(sys.argv[1:])
 
-# REPLACE KEY WITH YOUR OWN!
+if endpoint == None or key == None or args == None:
+    print("Usage: python extract-key-phrases.py --endpoint <endpoint_url> --key <api_key> <input_file>")
+    sys.exit(2)
+
 headers = {
     # Request headers
     'Content-Type': 'application/json',
-    'Ocp-Apim-Subscription-Key': '',
+    'Ocp-Apim-Subscription-Key': key,
 }
+
+# Making the output filename assumes the input filename has only one .
+input_file = args[0]
+elements = input_file.split('.')
+output_file = elements[0] + '-key-phrases.' + elements[1]
 
 params = urllib.parse.urlencode({
     })
@@ -48,13 +64,6 @@ def split_at_last_paragraph(text, max_length):
         return (text[:pos1], text[(pos1 + 1):])
 
 
-import sys
-input_file = sys.argv[1]  # File is first argument; [0] is the .py file
-
-# Making the output filename assumes the input filename has only one .
-elements = input_file.split('.')
-output_file = elements[0] + '-key-phrases.' + elements[1]
-
 print("extract-key-phrases: Starting key phrase extraction")
 
 with open(input_file, encoding='utf-8') as f_in:
@@ -64,6 +73,7 @@ with open(input_file, encoding='utf-8') as f_in:
  
     csv_headers = next(reader)
     csv_headers.append("KeyPhrases")
+    index_file = csv_headers.index("File")
 
     with open(output_file, 'w', encoding='utf-8', newline='') as f_out:
         writer = csv.writer(f_out)
@@ -77,7 +87,7 @@ with open(input_file, encoding='utf-8') as f_in:
         # boundaries. For starters, we just do this at the nearest \n to the 5K limit. 
         
         for row in reader:
-            filename = row[1]
+            filename = row[index_file]
 
             if filename == '':
                 continue
