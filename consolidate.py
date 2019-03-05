@@ -15,14 +15,15 @@
 # Note that this script depends on the CSV file being sorted by filename, as take-inventory.py produces.
 
 import sys
-from utilities import parse_folders_terms_arguments, make_identifier
+import json
+from utilities import parse_config_arguments, make_identifier
 
-_, terms_file, args = parse_folders_terms_arguments(sys.argv[1:])
+config_file, args = parse_config_arguments(sys.argv[1:])
 
-if terms_file == None:
-    print("Usage: python consolidate.py --terms=<terms_file> <input_csv_file.csv>")
+if config_file == None:
+    print("Usage: python consolidate.py --config=<config_file> <input_csv_file.csv>")
     print("<input_csv_file.csv> is the output from take-inventory.py or extract-metadata.py and should be sorted by filename.")
-    print("<terms_file> should be the same one given to take-inventory.py.")
+    print("<config_file> should be the same one given to take-inventory.py.")
     sys.exit(2)
 
 # Making the output filename assumes the input filename has only one .
@@ -32,17 +33,20 @@ output_file = elements[0] + '-consolidated.' + elements[1]
 
 print("consolidate: Starting consolidation")
 
-terms = [line.rstrip('\n') for line in open(terms_file)]
+config = None
+with open(config_file) as config_file:
+    config = json.load(config_file)
 
-# Clear out unused terms and strip off the L/R/# indicators, leaving only
-# a list of raw terms that are in use.
-used_terms = []
+prefix = input_file.split('-')[0].lower()
+terms = None
+for content_set in config["inventory"]:
+    if content_set["name"].lower() == prefix:
+        terms = content_set["terms"]
+        break
 
-for term in terms:    
-    if not term.startswith('#'):
-        used_terms.append(term)
-
-terms = used_terms
+if terms is None:
+    print("Could not find terms for {}".format(prefix))
+    sys.exit(1)
 
 with open(input_file, encoding='utf-8') as f_in:
     import csv    

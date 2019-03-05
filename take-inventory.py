@@ -9,18 +9,18 @@ import re
 import json
 
 from slugify import slugify
-from utilities import get_next_filename, parse_folders_terms_arguments
+from utilities import get_next_filename, parse_config_arguments
 
 # Get input file arguments, defaulting to folders.txt and terms.txt
-config_file, _ = parse_folders_terms_arguments(sys.argv[1:])
+config_file, _ = parse_config_arguments(sys.argv[1:])
 
 if config_file is None:
     print("Usage: python take-inventory.py --config <config_file>")
     sys.exit(2)
 
 config = None
-with open(config_file, 'r') as config_file:
-    config = json.load(config_file)
+with open(config_file, 'r') as config_load:
+    config = json.load(config_load)
 
 if config is None:
     print("Could not deserialize config file")
@@ -79,7 +79,7 @@ for content_set in config["content"]:
 # Sort the results (by filename, then line number), because a sorted list is needed for
 # consolidate.py, and this removes the need to open the .csv file in Excel for a manual sort.
 print("take-inventory: Sorting results by filename")
-for inventory, rows in results.iteritems():
+for inventory, rows in results.items():
     rows.sort(key=lambda row: (row[1], int(row[4])))  # Use int on [4] to sort the line numbers numerically
 
     # Open CSV output file, which we do before running the searches because
