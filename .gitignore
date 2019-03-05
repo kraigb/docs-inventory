@@ -1,13 +1,9 @@
 # Environment folders
-.vscode/*
-.env/*
-__pycache__/*
-
-# Dev and other private files
-process.py
-test_data/*
+.vscode
+.env
+.winenv
+__pycache__
 
 # Runtime files
 *.csv
 *.xls*
-text_results/*.txt

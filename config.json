@@ -1,0 +1,36 @@
+{
+    "content": [
+        {
+            "repo": "MicrosoftDocs/azure-docs-pr",
+            "path": "C:\\Users\\sttramer\\src\\azure-docs-pr",
+            "url": "http://docs.microsoft.com/azure"
+        },
+        {
+            "repo": "MicrosoftDocs/vsts-docs",
+            "url": "https://docs.microsoft.com/azure/devops"
+        },
+        {
+            "repo": "MicrosoftDocs/visualstudio-docs-pr",
+            "url": "https://docs.microsoft.com/visualstudio"
+        },
+        {
+            "repo": "Microsoft/vscode-docs",
+            "url": "https://code.visualstudio.com/docs"
+        }
+    ],
+    "inventory": [
+        {
+            "name": "Python",
+            "terms": [
+                "Python",
+                "Jupyter"
+            ]
+        },
+        {
+            "name": "Java",
+            "terms": [
+                "Java[^Ss]"
+            ]
+        }
+    ]
+}

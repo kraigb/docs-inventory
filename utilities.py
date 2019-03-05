@@ -5,7 +5,7 @@ import re
 import sys
 
 
-def get_next_filename():    
+def get_next_filename(prefix=None):    
     """ Determine the next filename by incrementing 1 above the largest existing file number in the current folder for today's date."""
 
     today = datetime.date.today()
@@ -19,16 +19,18 @@ def get_next_filename():
         file_nums = [item[19:23] for item in files ]
         next_num = max(int(n) for n in file_nums) + 1
 
-    return "%s-%04d" % (date_pattern, next_num)
+    filename = "%s-%04d" % (date_pattern, next_num) 
+    if prefix is not None:
+        return "{}-{}".format(prefix, filename)
+    return filename
 
 
-def parse_folders_terms_arguments(argv):
-    """ Parses an arguments list for take-inventory.py, returning folders and terms filenames (tuple), defaulting to folders.txt and terms.txt. Any additional arguments after the options are included in the tuple."""
-    folders_file = 'folders.txt'
-    terms_file = 'terms.txt'
+def parse_config_arguments(argv):
+    """ Parses an arguments list for take-inventory.py, returning config file name. Any additional arguments after the options are included in the tuple."""
+    config_file = "config.json"
 
     try:
-        opts, args = getopt.getopt(argv, 'hH?', ["folders=", "terms="])
+        opts, args = getopt.getopt(argv, 'hH?', ["config="])
     except getopt.GetoptError:
         return (None, None, None)
 
@@ -36,13 +38,10 @@ def parse_folders_terms_arguments(argv):
         if opt in ('-h', '-H', '-?'):
             return (None, None, None)
 
-        if opt in ('--folders'):
-            folders_file = arg
-
-        if opt in ('--terms'):
-            terms_file = arg
+        if opt in ('--config'):
+            config_file = arg
     
-    return (folders_file, terms_file, args)
+    return (config_file, args)
 
 
 def parse_endpoint_key_arguments(argv):
