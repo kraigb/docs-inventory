@@ -39,10 +39,8 @@ terms = [line.rstrip('\n') for line in open(terms_file)]
 used_terms = []
 
 for term in terms:    
-    terms_info = term.split(None, 1)    
-
-    if not terms_info[0].startswith('#'):
-        used_terms.append(terms_info[1])
+    if not term.startswith('#'):
+        used_terms.append(term)
 
 terms = used_terms
 
@@ -75,7 +73,7 @@ with open(input_file, encoding='utf-8') as f_in:
         term_counts = [0] * len(terms)
         current_row = next(reader)
 
-        while (True):
+        while current_row is not None:
             if current_row == None:
                 break
 

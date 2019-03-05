@@ -1,10 +1,12 @@
-# For each path in folders.txt, invoke findstr (a Windows tool) for each term in terms.txt.
-# This script works only on Windows.
+# For each path in folders.txt, run regex terms defined in terms.txt
 
 import csv
 import os
 import subprocess
 import sys
+import pathlib
+import re
+
 from slugify import slugify
 from utilities import get_next_filename, parse_folders_terms_arguments
 
@@ -37,64 +39,34 @@ for folder_item in folders:
 
     # Now loop through the terms and run findstr to generate intermediate result files
     for term in terms:
-        # Separate the term type and the term itself
-        terms_info = term.split(None, 1)
-        term_type = terms_info[0]
-        term = terms_info[1]
-
-        # Ignore commented terms when term type
-        if term_type.startswith('#'):
+        # Ignore commented-out terms
+        if term.startswith('#'):
             print('take-inventory: Ignoring commented term "%s"' % (term))
             continue
 
         print('take-inventory: Searching %s for "%s"' %(docset, term))
+        
+        term = re.compile(term, re.IGNORECASE | re.MULTILINE)
+        for root, dirs, files in os.walk(folder):
+            for file in files:
+                if pathlib.Path(file).suffix != '.md':
+                    continue
+                full_path = os.path.join(root, file)
+                try:
+                    content = pathlib.Path(full_path).read_text()
+                except UnicodeDecodeError:
+                    print("WARNING: File {} contains non-UTF-8 characters: Must be converted. Skipping.".format(full_path))
+                    continue
 
-        text_file = 'text_results\\%s-%s.txt' % (docset, slugify(term))
-        command = 'findstr /S /%s /N /I /C:"%s" %s\*.md > %s' % (term_type, term, folder, text_file)
-
-        print('take-inventory: Running ' + command)
-        os.system(command)
-
-        # Now process text results into CSV results
-        with open(text_file, encoding="utf-8") as input_file:
-            print('take-inventory: Processing %s into CSV' % (text_file))
-
-            count = 1
-
-            try:
-                for line in input_file:
-                    # Each line is <path>:<line>:<extract>. We split using the colon delimeter,
-                    # but not after the third occurrence, which should be the : before <extract>.
-                    # This avoids splitting the extract. We can then easily join the drive and
-                    # path back together. (This is specific to Windows!)
-                    elements = line.split(":", 3)
-
-                    # Guard against bad lines in the findstr output
-                    if len(elements) < 3:
-                        print('take-inventory: Line %s contains an error' % (count))
-                        continue;
-
-                    # Attach drive letter back to filename
-                    path = elements[0] + ':' + elements[1]
-                    line = elements[2]
-
-                    # Skip index.md and toc.md/TOC.md
-                    if any(skip_file in path.lower() for skip_file in ["toc.md", "index.md", "index.experimental.md"]):
-                        continue;
-
-                    # Strip all leading and trailing whitespace from the extract, along with any
-                    # leading - signs because when Excel imports the .csv file it otherwise treats
-                    # those lines as formulas, inserts an =, and ends up showing "#NAME?" 
-                    extract = elements[3].strip().lstrip("-")
-
-                    # Generate the URL from the file path, which just means replacing the folder
-                    # with the base_url, removing ".md", and replacing \\ with /
-                    url = path.replace(folder, base_url).replace('.md', '').replace('\\', '/')
-
-                    result_rows.append([docset, path, url, term, line, extract])
-                    count += 1
-            except:
-                print("take-inventory: Encoding error in %s at line %d" % (text_file, count))
+                # Finding the first match is sufficient for inventory purposes - it will likely occur
+                # multiple times in the file.
+                match = term.search(content)
+                if match is not None:
+                    line_start = content.rfind("\n", match.span()[0])
+                    line_end = content.find("\n", match.span()[1])
+                    line = content[0:match.span()[0]].count("\n") + 1
+                    url = full_path.replace(folder, base_url).replace('.md','').replace('\\','/')
+                    result_rows.append([docset, full_path, url, term.pattern, line, content[line_start:line_end]])
 
 # Sort the results (by filename, then line number), because a sorted list is needed for
 # consolidate.py, and this removes the need to open the .csv file in Excel for a manual sort.
