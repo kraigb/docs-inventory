@@ -1,4 +1,4 @@
-These scripts use the Windows findstr command-line tool and some Python processing to search for terms across multiple documentation repositories. (Repositories are assumed to use the metadata formats for docs.microsoft.com.)
+These scripts use Python to search for terms across multiple documentation repositories. (Repositories are assumed to use the metadata formats for docs.microsoft.com.)
 
 To use this tool:
 
@@ -11,7 +11,3 @@ To use this tool:
 4. Modify `terms.txt` to list the case-insensitive terms you want to search. Each line has an individual term and can include spaces and regular expressions (which are allowed by findstr). (If you need a case-sensitive search, remove /I from the findstr command line in `take-inventory.py`.)
 
 5. Run "python take-inventory.py" and output is generated in `results_<date>_<random_int>.csv` and `results_<date>_<random_int>-with-metadata.csv` files, the latter of which includes various metadata values extracted from the files in question (see extract-metadata.py, which is invoked at the end of take-inventory.py).
-
-Note that after a run, the `text_results` folder contains intermediate files from the findstr command line, which are of the form `<docset>-<search-term>.txt`. These can be deleted once you have the .csv files.
-
-The first time you run a search in a particular folder, the findstr command probably takes a minute or two, depending on the number of files. Subsequent runs, however, will happen much more quickly thanks to Windows' file system caching. This characteristic means that it's very quick and easy to modify search terms and run the tool again...you won't be waiting as long.
