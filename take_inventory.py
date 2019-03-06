@@ -60,11 +60,11 @@ def take_inventory(config):
                         # multiple times in the file.
                         match = term.search(content)
                         if match is not None:
-                            line_start = content.rfind("\n", match.span()[0])
+                            line_start = content.rfind("\n", 0, match.span()[0])
                             line_end = content.find("\n", match.span()[1])
                             line = content[0:match.span()[0]].count("\n") + 1
                             url = full_path.replace(folder, base_url).replace('.md','').replace('\\','/')
-                            results[name].append([docset, full_path, url, term.pattern, line, content[line_start:line_end]])
+                            results[name].append([docset, full_path, url, term.pattern, line, content[line_start:line_end].strip()])
 
     # Sort the results (by filename, then line number), because a sorted list is needed for
     # consolidate.py, and this removes the need to open the .csv file in Excel for a manual sort.
