@@ -58,8 +58,7 @@ def take_inventory(config):
                     for term in terms[name]:
                         # Finding the first match is sufficient for inventory purposes - it will likely occur
                         # multiple times in the file.
-                        match = term.search(content)
-                        if match is not None:
+                        for match in term.finditer(content):
                             line_start = content.rfind("\n", 0, match.span()[0])
                             line_end = content.find("\n", match.span()[1])
                             line = content[0:match.span()[0]].count("\n") + 1
