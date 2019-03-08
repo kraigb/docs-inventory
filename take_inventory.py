@@ -45,7 +45,7 @@ def take_inventory(config):
                     continue
                 full_path = os.path.join(root, file)
                 try:
-                    content = pathlib.Path(full_path).read_text()
+                    content = pathlib.Path(full_path).read_text(errors="ignore")
                 except UnicodeDecodeError:
                     print("WARNING: File {} contains non-UTF-8 characters: Must be converted. Skipping.".format(full_path))
                     continue
