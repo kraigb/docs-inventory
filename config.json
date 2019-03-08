@@ -2,20 +2,38 @@
     "content": [
         {
             "repo": "MicrosoftDocs/azure-docs-pr",
-            "path": "C:\\Users\\sttramer\\src\\azure-docs-pr",
+            "path": "C:\\repos\\azure-docs-pr",
             "url": "http://docs.microsoft.com/azure"
         },
         {
-            "repo": "MicrosoftDocs/vsts-docs",
+            "repo": "MicrosoftDocs/vsts-docs-pr",
+            "path": "C:\\repos\\vsts-docs-pr",
             "url": "https://docs.microsoft.com/azure/devops"
         },
         {
             "repo": "MicrosoftDocs/visualstudio-docs-pr",
+            "path": "C:\\repos\\visualstudio-docs-pr",
             "url": "https://docs.microsoft.com/visualstudio"
         },
         {
             "repo": "Microsoft/vscode-docs",
+            "path": "C:\\repos\\vscode-docs",
             "url": "https://code.visualstudio.com/docs"
+        },
+        {
+            "repo": "Azure/azure-docs-sdk-java",
+            "path": "C:\\repos\\azure-docs-sdk-java",
+            "url": "https://docs.microsoft.com/java/azure"
+        },
+        {
+            "repo": "MicrosoftDocs/azure-docs-sdk-python",
+            "path": "C:\\repos\\azure-docs-sdk-python",
+            "url": "https://docs.microsoft.com/python/azure"
+        },
+        {
+            "repo": "MicrosoftDocs/azure-docs-sdk-node",
+            "path": "C:\\repos\\azure-docs-sdk-node",
+            "url": "https://docs.microsoft.com/javascript/azure"
         }
     ],
     "inventory": [
@@ -29,7 +47,61 @@
         {
             "name": "Java",
             "terms": [
-                "Java[^Ss]"
+                "Java[^Ss]",
+                "Maven",
+                "Spring"
+            ]
+        },
+        {
+            "name": "JavaScript",
+            "terms": [
+                "JavaScript",
+                "Node.js",
+                "NPM"
+            ]
+        },
+        {
+            "name": "DevOps",
+            "terms": [
+                "DevOps",
+                "Azure DevOps",
+                "service endpoint",
+                "Azure DevOps Services",
+                "Repos",
+                "CI/CD",
+                "TFS",
+                "continuous deployment",
+                "continuous integration",
+                "work items",
+                "VSTS",
+                "Azure Pipelines",
+                "Azure DevOps Services organization",
+                "agile",
+                "the Azure DevOps Project",
+                "continuous delivery",
+                "Azure Repos",
+                "Team Services",
+                "release definition",
+                "Azure DevOps project",
+                "Team Foundation Server",
+                "Azure DevOps Git",
+                "Visual Studio Team Services",
+                "Azure DevOps organization",
+                "build definition",
+                "Visual Studio Online",
+                "Team Explorer",
+                "Visual Studio Marketplace",
+                "team project",
+                "Release Management",
+                "Azure DevOps Services project",
+                "sprint plan",
+                "private agent",
+                "VSO",
+                "VSTS account",
+                "Azure DevOps Marketplace",
+                "VSTS Git",
+                "Boards",
+                "VSTS project"
             ]
         }
     ]
