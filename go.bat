@@ -13,5 +13,5 @@ git pull origin master
 cd ..\azure-docs-pr
 git pull origin master
 popd
-python take-inventory.py
+python take_inventory.py
 move *.csv \InventoryData
