@@ -1,0 +1,32 @@
+{
+    "content": [
+        {
+            "repo": "MicrosoftDocs/azure-docs-pr",
+            "path": "d:\\g\\azure-docs-pr",
+            "url": "http://docs.microsoft.com/azure"
+        },
+        {
+            "repo": "MicrosoftDocs/vsts-docs-pr",
+            "path": "d:\\g\\vsts-docs-public",
+            "url": "https://docs.microsoft.com/azure/devops"
+        },
+        {
+            "repo": "MicrosoftDocs/visualstudio-docs-pr",
+            "path": "d:\\g\\visualstudio-docs-pr",
+            "url": "https://docs.microsoft.com/visualstudio"
+        },
+        {
+            "repo": "MicrosoftDocs/azure-docs-sdk-python",
+            "path": "d:\\g\\azure-docs-sdk-python",
+            "url": "https://docs.microsoft.com/python/azure"
+        }
+    ],
+    "inventory": [
+        {
+            "name": "Python",
+            "terms": [
+                "Python"
+            ]
+        }
+    ]
+}
