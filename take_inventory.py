@@ -111,8 +111,8 @@ if __name__ == "__main__":
         print("Could not deserialize config file")
         sys.exit(1)
 
-    # Run the script in the 'results' folder (using the environment variable if it exists)
-    results_folder = os.getenv("INVENTORY_RESULTS_FOLDER", "results")
+    # Run the script in the 'InventoryData' folder (using the environment variable if it exists)
+    results_folder = os.getenv("INVENTORY_RESULTS_FOLDER", "InventoryData")
     os.chdir(results_folder)
 
     take_inventory(config, results_folder)
