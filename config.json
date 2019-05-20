@@ -16,7 +16,7 @@
             "repo": "MicrosoftDocs/visualstudio-docs-pr",
             "path": "C:\\repos\\visualstudio-docs-pr",
             "url": "https://docs.microsoft.com/visualstudio",
-            "exclude_folders" : ["includes", "vs-2015", "mac", "subscriptions"]
+            "exclude_folders" : ["includes", "vs-2015", "mac", "subscriptions", "extensibility"]
         },
         {
             "repo": "Microsoft/vscode-docs",
@@ -45,11 +45,16 @@
     ],
     "inventory": [
         {
-            "name": "PythonJupyterML",
+            "name": "Python",
             "terms": [
                 "Python",
                 "Flask",
-                "Django",
+                "Django"
+            ]
+        },
+        {
+            "name": "JupyterML",
+            "terms": [
                 "Jupyter",
                 "data science",
                 "machine learning"

@@ -16,7 +16,7 @@
             "repo": "MicrosoftDocs/visualstudio-docs-pr",
             "path": "d:\\g\\visualstudio-docs-pr",
             "url": "https://docs.microsoft.com/visualstudio",
-            "exclude_folders" : ["includes", "vs-2015", "mac", "subscriptions"]
+            "exclude_folders" : ["includes", "vs-2015", "mac", "subscriptions", "extensibility"]
         },
         {
             "repo": "Microsoft/vscode-docs",
