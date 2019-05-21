@@ -62,7 +62,11 @@ def take_inventory(config, results_folder):
                     for term in terms[name]:
                         for match in term.finditer(content):
                             line_start = content.rfind("\n", 0, match.span()[0])
+                            line_start = 0 if line_start == -1 else line_start  # Handle BOF case
+
                             line_end = content.find("\n", match.span()[1])
+                            line_end = len(content) if line_end == -1 else line_end # Handle EOF case
+
                             line = content[0:match.span()[0]].count("\n") + 1
                             url = base_url + full_path[full_path.find('\\', len(folder) + 1) : -3].replace('\\','/')
                             results[name].append([docset, full_path, url, term.pattern, line, content[line_start:line_end].strip()])
