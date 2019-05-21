@@ -11,7 +11,6 @@ TERM_CLASSIFICATION = {
     "link_url": "link_url",
     "media_url" : "media_url",
     "alt_text": "alt_text",
-    "table": "table",
     "html_misc": "html_misc",
     "meta_title": "meta_title",
     "meta_description": "meta_description",
@@ -176,7 +175,7 @@ def is_codefence(line, term):
     # A codefence means the term matches a list of known languages and is immediately preceded by ```; the line
     # also ends immediately after the term (stripping whitespace)
     
-    line = line.strip()  # Remove whitespace to account for instances where code fence has spaces after it
+    line = line.lower().strip()  # Remove whitespace to account for instances where code fence has spaces after it
     term_lower = term.lower()    
 
     if is_whitelist_language(term_lower):
@@ -188,7 +187,7 @@ def is_codefence(line, term):
     return False
 
 
-def classify_occurrence(line, pos_end, term, line_num, code_blocks):
+def classify_occurrence(line, pos_end, term, line_num, filename, code_blocks):
     """Classifies the occurrences of term within line, returning a classification tag. Return value is a list
     of keys in the TERM_CLASSIFICATION list. Here, line contains the full line of text; pos_end indicates the ending
     position of the term, which is needed when we have to look at the preceding text only.
@@ -219,16 +218,16 @@ def classify_occurrence(line, pos_end, term, line_num, code_blocks):
 
     
     # Preceding text cases: checked from innermost cases first, e.g. link_url before link_text.
-    #    link_url: term is preceded by "](", "][", href=", or "]: "
-    #    link_text: term is preceded by "[" or "<a"
     #    media_url: term is preceded by "src=", "<img", or "<video"
     #    alt_text: term is preceded by "![" or "alt="
-    #    table: term is preceded by "|" or "<td"
+    #    link_url: term is preceded by "](", "][", href=", or "]: "
+    #    link_text: term is preceded by "[" or "<a"    
     #    h1: term is preceded by "<h1"
     #    subheading: term is is preceded by "<h" (check after looking for h1 specifically)
 
-    mappings = { "link_url": ["](", "][", "href=", "]: "], "link_text": ["[", "<a"],
-        "media_url": ["src=", "<img", "<video"], "alt_text": ["![", "alt="], "table": ["|", "<td"], "h1": ["<h1"], "subheading": ["<h2", "<h3", "<h4"]
+    mappings = { "alt_text": ["![", "alt="], 
+        "link_url": ["](", "][", "href=", "]: "], "link_text": ["[", "<a"],
+        "h1": ["<h1"], "subheading": ["<h2", "<h3", "<h4", "<h5"]
         }
 
     for key, values in mappings.items():
@@ -248,8 +247,8 @@ def classify_occurrence(line, pos_end, term, line_num, code_blocks):
     #    html_misc: line starts with "<!--" or "<div"
 
     mappings = {"meta_title": ["title:", "TOCTitle:", "PageTitle:"], "meta_description": ["description:", "MetaDescription:"],
-        "meta_keywords": ["keywords:"], "meta_ms": ["ms.devlang:", "ms.technology:", "Area:"],
-        "meta_redirect": ["redirect_url:"], "h1": ["# "], "subheading": ["##"], "html_misc" : ["<!--", "<div"]
+        "meta_keywords": ["keywords:"], "meta_ms": ["ms.devlang:", "ms.technology:", "Area:", "documentationcenter:"],
+        "meta_redirect": ["redirect_url:"], "h1": ["# "], "subheading": ["##"], "code_block": ["<pre"], "html_misc" : ["<!--", "<div"]
         }
     
     for key, values in mappings.items():
@@ -257,14 +256,40 @@ def classify_occurrence(line, pos_end, term, line_num, code_blocks):
             return TERM_CLASSIFICATION[key]
 
 
+    # SPECIAL HACK SECTION :) All of these are here to get the .csv to come out right without
+    # added manual classification. In some of these cases, we can certainly go fix the files in question,
+    # but to keep them consistent within their docset would require changing a number of other files.
+    # Thus adding special cases to this inventory tool is simpler.
+
     # Special case #1:
-    #     A line beginning with "- <term>" where term is a language, and the line number if < 20 (generally meaning a
-    #     header then it's an ms.workload entry in the VS Docs, which we classify as meta_ms. There are no known
-    #     false positives for these criteria. Other instances past line 20 are text in a bullet list.
+    #    A line beginning with "- <term>" where term is a language, and the line number if < 20 (generally meaning a
+    #    header then it's an ms.workload entry in the VS Docs, which we classify as meta_ms. There are no known
+    #    false positives for these criteria. Other instances past line 20 are text in a bullet list.
 
     if line_num <= 20:
         if is_whitelist_language(term) and line_trunc.lower().startswith("- " + term.lower()):
             return TERM_CLASSIFICATION["meta_ms"]
+
+    # Special case #2:
+    #   azure-docs-pr\articles\service-fabric\service-fabric-service-model-schema.md contains a length Python script
+    #   inside an HTML comment. A number of lines in this article show up for "Python" but are false positives, to
+    #   we classify lines starting with "file.write" as html_misc
+    if filename == "service-fabric-service-model-schema.md" and line_trunc.startswith("file.write"):
+        return TERM_CLASSIFICATION["html_misc"]
+
+    # Special case #3:
+    #   azure-docs-pr\articles\key-vault\key-vault-hsm-protected-keys.md contains a bunch of Python CLI commands
+    #   that have nothing to do with Python; those commands aren't in code fences at all, and should be classified
+    #   as code_block.
+    if filename == "key-vault-hsm-protected-keys.md" and line_trunc.startswith('"%nfast+home'):
+        return TERM_CLASSIFICATION["html_misc"]
+
+    # Special case #4:
+    #   azure-docs-pr\articles\hdinsight\spark\apache-spark-deep-learning-caffe.md has a lot of indented code blocks
+    #   without fences, containing a bunch of CLI stuff. 
+    if filename == "apache-spark-deep-learning-caffe.md" and (line_trunc.startswith('sudo apt-get install') or line_trunc.startswith("<value>")):
+        return TERM_CLASSIFICATION["code_block"]
+
 
     # If we get here, term is contained within regular text or some other unhandled case
     return TERM_CLASSIFICATION["text"]

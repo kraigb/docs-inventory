@@ -10,7 +10,7 @@ from consolidate import consolidate
 from extract_metadata import extract_metadata
 
 from slugify import slugify
-from utilities import get_next_filename, parse_config_arguments
+from utilities import get_next_filename, parse_config_arguments, classify_occurrence, delineate_code_blocks
 
 def take_inventory(config, results_folder):
     # Compile search terms
@@ -53,6 +53,8 @@ def take_inventory(config, results_folder):
                     print("take-inventory: WARNING: File {} contains non-UTF-8 characters: Must be converted. Skipping.".format(full_path))
                     continue
 
+                code_blocks = delineate_code_blocks(content)
+
                 for search in config["inventory"]:
                     name = search["name"].lower()
 
@@ -62,10 +64,21 @@ def take_inventory(config, results_folder):
                     for term in terms[name]:
                         for match in term.finditer(content):
                             line_start = content.rfind("\n", 0, match.span()[0])
+                            line_start = 0 if line_start == -1 else line_start  # Handle BOF case
+
                             line_end = content.find("\n", match.span()[1])
-                            line = content[0:match.span()[0]].count("\n") + 1
+                            line_end = len(content) if line_end == -1 else line_end # Handle EOF case
+
+                            line_num = content[0:match.span()[0]].count("\n") + 1
+                            line_content = content[line_start:line_end + 1].lstrip() # Keep the trailing \n for now
+
+                            # Second argument is the end of the term's occurrence, because we need to look at 
+                            # that subset of text in some classifications.
+                            tag = classify_occurrence(line_content, match.span()[1] - line_start,
+                                term.pattern, line_num, file, code_blocks)
+
                             url = base_url + full_path[full_path.find('\\', len(folder) + 1) : -3].replace('\\','/')
-                            results[name].append([docset, full_path, url, term.pattern, line, content[line_start:line_end].strip()])
+                            results[name].append([docset, full_path, url, term.pattern, tag, line_num, line_content.strip()])
 
     # Sort the results (by filename, then line number), and save to a .csv file.
     # A sorted list is needed for consolidate.py and removes the need to open
@@ -73,7 +86,7 @@ def take_inventory(config, results_folder):
     print("take-inventory: Sorting results by filename")
     
     for inventory, rows in results.items():
-        rows.sort(key=lambda row: (row[1], int(row[4])))  # Use int on [4] to sort the line numbers numerically
+        rows.sort(key=lambda row: (row[1], int(row[5])))  # Use int on [4] to sort the line numbers numerically
 
         # Open CSV output file, which we do before running the searches because
         # we consolidate everything into a single file
@@ -83,17 +96,17 @@ def take_inventory(config, results_folder):
 
         with open(result_filename + '.csv', 'w', newline='', encoding='utf-8') as csv_file:    
             writer = csv.writer(csv_file)
-            writer.writerow(['Docset', 'File', 'URL', 'Term', 'Line', 'Extract'])
+            writer.writerow(['Docset', 'File', 'URL', 'Term', 'Tag', 'Line', 'Extract'])
             writer.writerows(rows)
 
         print("take-inventory: Completed first CSV results file")
         print("take-inventory: Invoking secondary processing to extract metadata")
 
-        meta_output = "{}-metadata.csv".format(result_filename)
-        consolidate_output = "{}-consolidated.csv".format(result_filename)
+        #meta_output = "{}-metadata.csv".format(result_filename)
+        #consolidate_output = "{}-consolidated.csv".format(result_filename)
 
-        extract_metadata(result_filename+".csv", meta_output)
-        consolidate(config, meta_output, consolidate_output)
+        #extract_metadata(result_filename+".csv", meta_output)
+        #consolidate(config, meta_output, consolidate_output)
 
 if __name__ == "__main__":
     # Get input file arguments, defaulting to folders.txt and terms.txt
