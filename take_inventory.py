@@ -70,12 +70,16 @@ def take_inventory(config, results_folder):
                             line_end = len(content) if line_end == -1 else line_end # Handle EOF case
 
                             line_num = content[0:match.span()[0]].count("\n") + 1
-                            line_content = content[line_start:line_end + 1].lstrip() # Keep the trailing \n for now
+                            line = content[line_start:line_end + 1]
+                            line_content = line.lstrip() # Keep the trailing \n in this variant
+
+                            # Determine the position in line_content of the term ending
+                            chars_removed = len(line) - len(line_content)
+                            term_end = match.span()[1] - line_start - chars_removed
 
                             # Second argument is the end of the term's occurrence, because we need to look at 
                             # that subset of text in some classifications.
-                            tag = classify_occurrence(line_content, match.span()[1] - line_start,
-                                term.pattern, line_num, file, code_blocks)
+                            tag = classify_occurrence(line_content, term_end, term.pattern, line_num, file, code_blocks)
 
                             url = base_url + full_path[full_path.find('\\', len(folder) + 1) : -3].replace('\\','/')
                             results[name].append([docset, full_path, url, term.pattern, tag, line_num, line_content.strip()])
