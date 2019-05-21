@@ -225,8 +225,10 @@ def classify_occurrence(line, pos_end, term, line_num, filename, code_blocks):
     #    h1: term is preceded by "<h1"
     #    subheading: term is is preceded by "<h" (check after looking for h1 specifically)
 
-    mappings = { "alt_text": ["![", "alt="],
-        "link_url": ["](", "][", "href=", "]: "], "link_text": ["[", "<a"],
+    mappings = {
+        "link_url": ["](", "][", "href=", "]: "], 
+        "alt_text": ["![", "alt="],
+        "link_text": ["[", "<a"],
         "media_url": ["src=", "<img", "<video"],
         "h1": ["<h1"], "subheading": ["<h2", "<h3", "<h4", "<h5"]
         }
