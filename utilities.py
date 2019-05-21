@@ -274,21 +274,24 @@ def classify_occurrence(line, pos_end, term, line_num, filename, code_blocks):
     #   azure-docs-pr\articles\service-fabric\service-fabric-service-model-schema.md contains a length Python script
     #   inside an HTML comment. A number of lines in this article show up for "Python" but are false positives, to
     #   we classify lines starting with "file.write" as html_misc
-    if filename == "service-fabric-service-model-schema.md" and line_trunc.startswith("file.write"):
-        return TERM_CLASSIFICATION["html_misc"]
+    if filename == "service-fabric-service-model-schema.md":
+        if line_trunc.startswith("file.write"):
+            return TERM_CLASSIFICATION["html_misc"]
 
     # Special case #3:
     #   azure-docs-pr\articles\key-vault\key-vault-hsm-protected-keys.md contains a bunch of Python CLI commands
     #   that have nothing to do with Python; those commands aren't in code fences at all, and should be classified
     #   as code_block.
-    if filename == "key-vault-hsm-protected-keys.md" and line_trunc.startswith('"%nfast+home'):
-        return TERM_CLASSIFICATION["html_misc"]
+    if filename == "key-vault-hsm-protected-keys.md":
+        if line_trunc.startswith('"%nfast_home'):
+            return TERM_CLASSIFICATION["html_misc"]
 
     # Special case #4:
     #   azure-docs-pr\articles\hdinsight\spark\apache-spark-deep-learning-caffe.md has a lot of indented code blocks
     #   without fences, containing a bunch of CLI stuff. 
-    if filename == "apache-spark-deep-learning-caffe.md" and (line_trunc.startswith('sudo apt-get install') or line_trunc.startswith("<value>")):
-        return TERM_CLASSIFICATION["code_block"]
+    if filename == "apache-spark-deep-learning-caffe.md":
+        if line_trunc.startswith('sudo apt-get install') or line_trunc.startswith("<value>"):
+            return TERM_CLASSIFICATION["code_block"]
 
 
     # If we get here, term is contained within regular text or some other unhandled case
