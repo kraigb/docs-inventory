@@ -1,0 +1,31 @@
+{
+    "content": [
+        {
+            "repo": "MicrosoftDocs/visualstudio-docs-pr",
+            "path": "d:\\g\\visualstudio-docs-pr",
+            "url": "https://docs.microsoft.com/visualstudio",
+            "exclude_folders" : ["includes", "vs-2015", "mac", "subscriptions", "extensibility", "rtvs"]
+        },
+        {
+            "repo": "Microsoft/vscode-docs",
+            "path": "d:\\g\\vscode-docs",
+            "url": "https://code.visualstudio.com/docs",
+            "exclude_folders" : ["includes", "release-notes", "blogs"]
+        },         {
+            "repo": "MicrosoftDocs/azure-docs-sdk-python",
+            "path": "d:\\g\\azure-docs-sdk-python",
+            "url": "https://docs.microsoft.com/python/azure",
+            "exclude_folders" : ["includes"]
+        }
+    ],
+    "inventory": [
+        {
+            "name": "Python",
+            "terms": [
+                "Python",
+                "Flask",
+                "Django"
+            ]
+        }
+    ]
+}

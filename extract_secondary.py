@@ -74,7 +74,7 @@ def extract_secondary(input_file, output_file):
                 # Note: an inconsistency in article is use of "python" or "Python" for code block
                 # languages, which comes through in the HTML as lang-python and lang-Python, both of
                 # which we must count
-                code_count = count_code_blocks(soup, ["python", "Python"])
+                code_count = count_code_blocks(soup, ["javascript", "js", "JS", "JavaScript"])
                 cli_count = count_code_blocks(soup, ["cli", "ps", "bash"])
 
                 row.append(time)
