@@ -42,6 +42,7 @@ def consolidate(config, input_file, output_file):
         
         # We'll replace the "Term" column with individual terms; Tags is also expanded to the distinct
         # classification tags. We also remove Line and Extract because they're no longer meaningful.
+        index_filename = headers.index("File")
         index_term = headers.index("Term")
         index_tag = headers.index("Tag")
         index_line = headers.index("Line")
@@ -64,9 +65,13 @@ def consolidate(config, input_file, output_file):
         headers.insert(index_term + i + 1, "Term_Total")  # Note underscore in column name
 
         index_tags_new = index_term + i + 2   # Index for inserting tabs after term counts
-
+        
         for i in range(0, len(tags)):        
             headers.insert(index_tags_new + i, make_identifier(tags[i]))            
+
+        # Add column for the count of terms in the filename
+        index_filename_count = index_tags_new + i + 1
+        headers.insert(index_filename_count, "in_filename")
 
         with open(output_file, 'w', encoding='utf-8', newline='') as f_out:        
             writer = csv.writer(f_out)
@@ -114,6 +119,11 @@ def consolidate(config, input_file, output_file):
                 # Add the tag count columns
                 for i in range(0, len(tags)):
                     current_row.insert(index_tags_new + i, tag_counts[i])                
+
+                # Add the filename occurrence count                
+                filename = current_row[index_filename].lower()
+                total = sum(filename.count(term.lower()) for term in terms)
+                current_row.insert(index_filename_count, total)
 
                 # Write the row
                 writer.writerow(current_row)
