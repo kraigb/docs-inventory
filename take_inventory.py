@@ -110,7 +110,7 @@ def take_inventory(config, results_folder):
         consolidate_output = "{}-consolidated.csv".format(result_filename)
 
         extract_metadata(result_filename+".csv", meta_output)
-        #consolidate(config, meta_output, consolidate_output)
+        consolidate(config, meta_output, consolidate_output)
 
 if __name__ == "__main__":
     # Get input file arguments, defaulting to folders.txt and terms.txt
