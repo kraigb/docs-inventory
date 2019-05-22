@@ -106,10 +106,10 @@ def take_inventory(config, results_folder):
         print("take-inventory: Completed first CSV results file")
         print("take-inventory: Invoking secondary processing to extract metadata")
 
-        #meta_output = "{}-metadata.csv".format(result_filename)
-        #consolidate_output = "{}-consolidated.csv".format(result_filename)
+        meta_output = "{}-metadata.csv".format(result_filename)
+        consolidate_output = "{}-consolidated.csv".format(result_filename)
 
-        #extract_metadata(result_filename+".csv", meta_output)
+        extract_metadata(result_filename+".csv", meta_output)
         #consolidate(config, meta_output, consolidate_output)
 
 if __name__ == "__main__":
