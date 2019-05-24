@@ -105,7 +105,7 @@ def extract_metadata(input_file, output_file):
 
                 prev_file = filename
 
-    print("extract-metadata, info, Completed metadata extraction, {}".format(output_file))
+    print("extract-metadata, INFO, Completed metadata extraction, {}".format(output_file))
 
 if __name__ == "__main__":
     if len(sys.argv) == 1:

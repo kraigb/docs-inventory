@@ -35,24 +35,32 @@ def count_intro_links(soup):
     return count
 
 
-def count_code_blocks(soup, languages):        
+def count_code_blocks(soup, languages):
+    # Code blocks are <pre><code class="lang-language"> where "language" is a specific language name (case insensitive).
+    # If the code block is unfenced, the class is BUG BUG
+
+    count = 0
+    blocks = soup.find_all('pre')
+
     # Looks for unfenced code blocks
     if languages == None:
-        blocks = soup.find_all('code', attrs={'class': None})
+        for block in blocks:
+            code_block = block.findNext("code")
 
-        if blocks == None:
-            return 0
+            if code_block != None and not code_block.has_key("class"):
+                count += 1
 
-        return len(blocks)
+        return count
+        #return sum(block.text == "" for block in blocks)       
 
     # Look for code blocks for a list of specific languages
-    count = 0
+    for block in blocks:
+        code_block = block.findNext("code")
 
-    for language in languages:
-        blocks = soup.find_all('code', attrs={'class': "lang-" + language})
-
-        if blocks != None:
-            count += len(blocks)
+        for language in languages:
+            if code_block.has_key("class"):
+                if code_block["class"][0].lower() == "lang-" + language.lower():
+                    count += 1
 
     return count
 
@@ -112,16 +120,16 @@ def extract_scrapings(input_file, output_file):
                 code_count_python = count_code_blocks(soup, ["python"])
                 code_count_js = count_code_blocks(soup, ["javascript", "js", "typescript", "node", "node.js"])
                 code_count_java = count_code_blocks(soup, ["java"])
-                cli_count = count_code_blocks(soup, ["cli", "ps", "bash"])
-                unfenced_count = count_code_blocks(soup, None)
+                code_count_cli = count_code_blocks(soup, ["cli", "ps", "bash", "shell"])
+                code_count_unfenced = count_code_blocks(soup, None)
 
                 row.append(time)
                 row.append(link_count)
                 row.append(code_count_python)
                 row.append(code_count_js)
                 row.append(code_count_java)
-                row.append(cli_count)
-                row.append(unfenced_count)
+                row.append(code_count_cli)
+                row.append(code_count_unfenced)
 
                 writer.writerow(row)
 
@@ -129,7 +137,7 @@ def extract_scrapings(input_file, output_file):
 
 if __name__ == "__main__":
     if len(sys.argv) == 1:
-        print("Usage: python extract-scrapings,pINFO, y <input_file>, {}".format(input_file))
+        print("Usage: python extract-scrapings <input_file>, {}".format(input_file))
         print("<input_csv_file.csv> is the output from extract-metadata.py or consolidate.py")
 
     input_file = sys.argv[1]  # File is first argument; [0] is the .py file
