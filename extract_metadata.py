@@ -5,12 +5,16 @@
 # take-inventory.py invokes this script automatically at the end of its processing
 
 import sys
+from utilities import COLUMNS
 
 def empty_metadata_values():
-    return { 'title' : '', 'description': '', 'msdate' : '', 'author' : '', 'msauthor' : '', 'manager' : '', 'msservice' : '', 'mstopic' : ''}
+    # The names of this dictionary are internal to this script; they neext only match what's used in extract_metadata
+    # and don't need to exactly match values in COLUMNS.
+    return { 'title' : '', 'description': '', 'msdate' : '', 'author' : '', 'msauthor' : '', 'manager' : '',
+        'msservice' : '', 'mstopic' : '' }
 
 def extract_metadata(input_file, output_file):
-    print("extract-metadata: Starting metadata extraction")
+    print("extract-metadata, INFO, Starting metadata extraction, {}".format(input_file))
 
     with open(input_file, encoding='utf-8') as f_in:
         import csv
@@ -22,7 +26,9 @@ def extract_metadata(input_file, output_file):
             # extract, H1, title, and description
             
             writer = csv.writer(f_out)
-            writer.writerow(['Docset', 'File', 'URL', 'MSAuthor', 'Author', 'Manager', 'MSDate', 'MSService', 'MSTopic', 'Term', 'Tag', 'Line', 'Extract', 'H1', 'Title', 'Description'])
+            writer.writerow([ COLUMNS['docset'], COLUMNS['file'], COLUMNS['url'], COLUMNS['msauthor'], COLUMNS['author'], 
+                COLUMNS['manager'], COLUMNS['msdate'], COLUMNS['msservice'], COLUMNS['mstopic'], COLUMNS['term'],
+                COLUMNS['tag'], COLUMNS['line'], COLUMNS['extract'], COLUMNS['h1'], COLUMNS['title'], COLUMNS['description'] ])
 
             # As we iterate on the rows in the input file, if the filename is the same as the
             # previous iteration, we use the same metadata values from that iteration to avoid
@@ -32,25 +38,27 @@ def extract_metadata(input_file, output_file):
             h1 = ''
 
             # The strings we look for to find metadata; VS Code has different metadata tags, so each value in this dictionary
-            # accommodates multiple possibilities.
-            metadata_text = { 'title' : ['title:', 'PageTitle:'], 'description' : ['description:', 'MetaDescription:'], 'msdate' : ['ms.date:', 'DateApproved:'], 'author' : ['author:'], 'msauthor' : ['ms.author:'], 'manager' : ['manager:'], 'msservice' : ['ms.service:'], 'mstopic' : ['ms.topic']}
+            # accommodates multiple possibilities. The keys here are used only internally and need not match csv column names.
+            metadata_text = { 'title' : ['title:', 'PageTitle:'], 'description' : ['description:', 'MetaDescription:'],
+                'msdate' : ['ms.date:', 'DateApproved:'], 'author' : ['author:'], 'msauthor' : ['ms.author:'],
+                'manager' : ['manager:'], 'msservice' : ['ms.service:'], 'mstopic' : ['ms.topic']}
             
             # The metadata values we find, which we carry from row to row
             metadata_values = empty_metadata_values()
             
-            next(reader)  # Skip the header line
+            headers = next(reader)
 
             count = 0
 
             for row in reader:
                 # Most of these variables are just for clarity in the program here
-                docset = row[0]
-                filename = row[1]
-                url = row[2]
-                term = row[3]
-                tag = row[4]
-                line_number = row[5]
-                extract = row[6]
+                docset = row[headers.index(COLUMNS["docset"])]
+                filename = row[headers.index(COLUMNS["file"])]
+                url = row[headers.index(COLUMNS["url"])]
+                term = row[headers.index(COLUMNS["term"])]
+                tag = row[headers.index(COLUMNS["tag"])]
+                line_number = row[headers.index(COLUMNS["line"])]
+                extract = row[headers.index(COLUMNS["extract"])]
 
                 if filename == prev_file:
                     # Don't do anything, because the values of the metadata variables are still valid
@@ -86,7 +94,7 @@ def extract_metadata(input_file, output_file):
                                     if any(line.startswith(value) for value in values):
                                         metadata_values[key] = line.split(":", 1)[1].strip()  # Remove metadata tag
                         except:
-                            print("extract-metadata: Encoding error in " + filename + "; skipping. Open the file directly and check for issues.")
+                            print("extract-metadata, ERROR, Skipping file with encoding error. Open file and check for errors, {}".format(filename))
 
                     # At this point, all the metadata_values are set
 
@@ -97,7 +105,7 @@ def extract_metadata(input_file, output_file):
 
                 prev_file = filename
 
-    print("extract-metadata: Completed metadata extraction")
+    print("extract-metadata, info, Completed metadata extraction, {}".format(output_file))
 
 if __name__ == "__main__":
     if len(sys.argv) == 1:

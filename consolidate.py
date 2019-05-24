@@ -16,12 +16,12 @@
 
 import sys
 import json
-from utilities import parse_config_arguments, make_identifier, TERM_CLASSIFICATION
+from utilities import parse_config_arguments, make_identifier, TAGS, COLUMNS
 
 def consolidate(config, input_file, output_file):
-    print("consolidate: Starting consolidation")
+    print("consolidate, INFO, Starting consolidation, {}".format(input_file))
 
-    prefix = input_file.split('-')[0].lower()
+    prefix = input_file.split('_')[0].lower()
     terms = None
 
     for content_set in config["inventory"]:
@@ -30,10 +30,10 @@ def consolidate(config, input_file, output_file):
             break
 
     if terms is None:
-        print("Could not find terms for {}".format(prefix))
+        print("consolidate, ERROR, Could not find terms for {}, {}".format(prefix, input_file))
         sys.exit(1)
     
-    tags = list(TERM_CLASSIFICATION.values())
+    tags = list(TAGS.values())
 
     with open(input_file, encoding='utf-8') as f_in:
         import csv    
@@ -42,16 +42,16 @@ def consolidate(config, input_file, output_file):
         
         # We'll replace the "Term" column with individual terms; Tags is also expanded to the distinct
         # classification tags. We also remove Line and Extract because they're no longer meaningful.
-        index_filename = headers.index("File")
-        index_term = headers.index("Term")
-        index_tag = headers.index("Tag")
-        index_line = headers.index("Line")
-        index_extract = headers.index("Extract")  
+        index_filename = headers.index(COLUMNS["file"])
+        index_term = headers.index(COLUMNS["term"])
+        index_tag = headers.index(COLUMNS["tag"])
+        index_line = headers.index(COLUMNS["line"])
+        index_extract = headers.index(COLUMNS["extract"])
 
-        headers.remove("Term")
-        headers.remove("Tag")
-        headers.remove("Line")
-        headers.remove("Extract")
+        headers.remove(COLUMNS["term"])
+        headers.remove(COLUMNS["tag"])
+        headers.remove(COLUMNS["line"])
+        headers.remove(COLUMNS["extract"])
 
         # Insert columns for each of the terms, plus a "Term_Total" column. Also insert columns for each of 
         # the tags.
@@ -62,7 +62,7 @@ def consolidate(config, input_file, output_file):
         for i in range(0, len(terms)):
             headers.insert(index_term + i, make_identifier(terms[i]))
 
-        headers.insert(index_term + i + 1, "Term_Total")  # Note underscore in column name
+        headers.insert(index_term + i + 1, COLUMNS["term_total"])
 
         index_tags_new = index_term + i + 2   # Index for inserting tabs after term counts
         
@@ -71,7 +71,7 @@ def consolidate(config, input_file, output_file):
 
         # Add column for the count of terms in the filename
         index_filename_count = index_tags_new + i + 1
-        headers.insert(index_filename_count, "in_filename")
+        headers.insert(index_filename_count, COLUMNS["in_filename"])
 
         with open(output_file, 'w', encoding='utf-8', newline='') as f_out:        
             writer = csv.writer(f_out)
@@ -133,7 +133,7 @@ def consolidate(config, input_file, output_file):
                 term_counts = [0] * len(terms)
                 tag_counts = [0] * len(tags)
 
-    print("consolidate: Consolidation complete")
+    print("consolidate, INFO, Consolidation complete, ")
 
 if __name__ == "__main__":
     config_file, args = parse_config_arguments(sys.argv[1:])

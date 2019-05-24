@@ -1,0 +1,30 @@
+{
+    "content": [
+        {
+            "repo": "Azure/azure-docs-sdk-java",
+            "path": "d:\\g\\azure-docs-sdk-java",
+            "url": "https://docs.microsoft.com/java/azure",
+            "exclude_folders" : ["includes"]
+        },
+        {
+            "repo": "MicrosoftDocs/azure-docs-sdk-python",
+            "path": "d:\\g\\azure-docs-sdk-python",
+            "url": "https://docs.microsoft.com/python/azure",
+            "exclude_folders" : ["includes"]
+        },
+        {
+            "repo": "MicrosoftDocs/azure-docs-sdk-node",
+            "path": "d:\\g\\azure-docs-sdk-node",
+            "url": "https://docs.microsoft.com/javascript/azure",
+            "exclude_folders" : ["includes"]
+        }
+    ],
+    "inventory": [
+        {
+            "name": "Issues",
+            "terms": [
+                "na"
+            ]
+        }
+    ]
+}
