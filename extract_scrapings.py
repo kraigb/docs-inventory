@@ -58,7 +58,7 @@ def count_code_blocks(soup, languages):
         code_block = block.findNext("code")
 
         for language in languages:
-            if code_block.has_key("class"):
+            if code_block != None and code_block.has_key("class"):
                 if code_block["class"][0].lower() == "lang-" + language.lower():
                     count += 1
 

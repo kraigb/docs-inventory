@@ -2,43 +2,43 @@
     "content": [
         {
             "repo": "MicrosoftDocs/azure-docs-pr",
-            "path": "d:\\g\\azure-docs-pr",
+            "path": "C:\\Users\\xsdocs\\g\\azure-docs-pr",
             "url": "http://docs.microsoft.com/azure",
             "exclude_folders" : ["includes", "markdown templates"]
         },
         {
             "repo": "MicrosoftDocs/vsts-docs-pr",
-            "path": "d:\\g\\vsts-docs-pr",
+            "path": "C:\\Users\\xsdocs\\g\\vsts-docs-pr",
             "url": "https://docs.microsoft.com/azure/devops",
             "exclude_folders" : ["includes", "_shared"]
         },
         {
             "repo": "MicrosoftDocs/visualstudio-docs-pr",
-            "path": "d:\\g\\visualstudio-docs-pr",
+            "path": "C:\\Users\\xsdocs\\g\\visualstudio-docs-pr",
             "url": "https://docs.microsoft.com/visualstudio",
             "exclude_folders" : ["includes", "vs-2015", "mac", "subscriptions", "extensibility"]
         },
         {
             "repo": "Microsoft/vscode-docs",
-            "path": "d:\\g\\vscode-docs",
+            "path": "C:\\Users\\xsdocs\\g\\vscode-docs",
             "url": "https://code.visualstudio.com/docs",
             "exclude_folders" : ["includes", "release-notes", "blogs"]
         },
         {
             "repo": "Azure/azure-docs-sdk-java",
-            "path": "d:\\g\\azure-docs-sdk-java",
+            "path": "C:\\Users\\xsdocs\\g\\azure-docs-sdk-java",
             "url": "https://docs.microsoft.com/java/azure",
             "exclude_folders" : ["includes"]
         },
         {
             "repo": "MicrosoftDocs/azure-docs-sdk-python",
-            "path": "d:\\g\\azure-docs-sdk-python",
+            "path": "C:\\Users\\xsdocs\\g\\azure-docs-sdk-python",
             "url": "https://docs.microsoft.com/python/azure",
             "exclude_folders" : ["includes"]
         },
         {
             "repo": "MicrosoftDocs/azure-docs-sdk-node",
-            "path": "d:\\g\\azure-docs-sdk-node",
+            "path": "C:\\Users\\xsdocs\\g\\azure-docs-sdk-node",
             "url": "https://docs.microsoft.com/javascript/azure",
             "exclude_folders" : ["includes"]
         }
