@@ -6,5 +6,6 @@ __pycache__
 
 # Runtime files
 InventoryData/*
+IssueData/*
 *.csv
 *.xls*
