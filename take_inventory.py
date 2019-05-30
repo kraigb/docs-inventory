@@ -8,12 +8,13 @@ import json
 
 from consolidate import consolidate
 from extract_metadata import extract_metadata
+from score import score
 
 from slugify import slugify
 from utilities import get_next_filename, parse_config_arguments, classify_occurrence, delineate_segments, COLUMNS
 
 def take_inventory(config, results_folder):
-    print("Script,Type,Message,Item")
+    print("Script,Type,Message,Detail,Item")
     # Compile search terms
     terms = {}
     for search in config["inventory"]:
@@ -28,14 +29,14 @@ def take_inventory(config, results_folder):
         exclude_folders = content_set.get("exclude_folders")
 
         if folder is None:
-            print("take-inventory, WARNING, No path for docset - skipping, {}".format(docset))
+            print("take_inventory, WARNING, No path for docset, Skipping, {}".format(docset))
             continue
 
         if docset is None or base_url is None:
-            print("take-inventory: Malformed config entry for docset {}; check your config file".format(docset))
+            print("take_inventory, ERROR, Malformed config entry for docset, Check your config file, {}".format(docset))
             continue
 
-        print('take-inventory, INFO, Processing docset {}, {}'.format(docset, folder))
+        print('take_inventory, INFO, Processing docset, {}, {}'.format(docset, folder))
 
         for root, dirs, files in os.walk(folder):
             for exclusion in exclude_folders:
@@ -51,14 +52,14 @@ def take_inventory(config, results_folder):
                 try:
                     content = pathlib.Path(full_path).read_text(errors="ignore")
                 except UnicodeDecodeError:
-                    print("take-inventory, WARNING, Skipping file that contains non-UTF-8 characters and should be converted, {}".format(full_path))
+                    print("take_inventory, WARNING, Skipping file that contains non-UTF-8 characters and should be converted, , {}".format(full_path))
                     continue
 
                 code_lines, intro_lines, metadata_lines = delineate_segments(content, full_path)
 
                 # Content check: if metadata_text is empty, then the article lacks metadata
                 if len(metadata_lines) == 0:
-                    print("take-inventory, WARNING, File contains no metadata, {}".format(full_path))
+                    print("take_inventory, WARNING, File contains no metadata, , {}".format(full_path))
 
                 for search in config["inventory"]:
                     name = search["name"].lower()
@@ -93,7 +94,7 @@ def take_inventory(config, results_folder):
     # Sort the results (by filename, then line number), and save to a .csv file.
     # A sorted list is needed for consolidate.py and removes the need to open
     # the .csv file in Excel for a manual sort.
-    print("take-inventory, INFO, Sorting results by filename,")
+    print("take_inventory, INFO, Sorting results by filename, , ")
     
     for inventory, rows in results.items():
         rows.sort(key=lambda row: (row[1], int(row[5])))  # Use int on [4] to sort the line numbers numerically
@@ -102,7 +103,7 @@ def take_inventory(config, results_folder):
         # we consolidate everything into a single file
 
         result_filename = get_next_filename(inventory)
-        print('take-inventory, INFO, Writing CSV results file, {}.csv'.format(result_filename))
+        print('take_inventory, INFO, Writing CSV results file, , {}.csv'.format(result_filename))
 
         with open(result_filename + '.csv', 'w', newline='', encoding='utf-8') as csv_file:    
             writer = csv.writer(csv_file)
@@ -110,21 +111,26 @@ def take_inventory(config, results_folder):
                 COLUMNS["tag"], COLUMNS["line"], COLUMNS["extract"] ])
             writer.writerows(rows)
 
-        print("take-inventory, INFO, Completed first CSV results file, {}".format(csv_file))
-        print("take-inventory, INFO, Invoking secondary processing to extract metadata, ")
+        print("take_inventory, INFO, Completed first CSV results file, , {}.csv".format(result_filename))
 
+        print("take_inventory, INFO, Invoking secondary processing to extract metadata, , ")
         meta_output = "{}-metadata.csv".format(result_filename)
         extract_metadata(result_filename+".csv", meta_output)
 
+        print("take_inventory, INFO, Invoking secondary processing to consolidate output, , ")
         consolidate_output = "{}-consolidated.csv".format(result_filename)
         consolidate(config, meta_output, consolidate_output)
+
+        print("take_inventory, INFO, Invoking secondary processing to apply scoring, , ")
+        score_output = "{}-score.csv".format(consolidate_output)
+        score(consolidate_output, score_output)
 
 if __name__ == "__main__":
     # Get input file arguments, defaulting to folders.txt and terms.txt
     config_file, _ = parse_config_arguments(sys.argv[1:])
 
     if config_file is None:
-        print("Usage: python take-inventory.py --config <config_file>")
+        print("Usage: python take_inventory.py --config <config_file>")
         sys.exit(2)
 
     config = None
