@@ -137,7 +137,7 @@ def extract_scrapings(input_file, output_file):
 
 if __name__ == "__main__":
     if len(sys.argv) == 1:
-        print("Usage: python extract_scrapings <input_file>, {}".format(input_file))
+        print("Usage: python extract_scrapings.py <input_file>, {}".format(input_file))
         print("<input_csv_file.csv> is the output from extract_metadata.py or consolidate.py")
 
     input_file = sys.argv[1]  # File is first argument; [0] is the .py file
