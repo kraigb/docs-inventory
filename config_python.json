@@ -44,8 +44,11 @@
             "name": "JupyterML",
             "terms": [
                 "Jupyter",
+                "Spark",
                 "data science",
-                "machine learning"
+                "data-science",
+                "machine learning",
+                "machine-learning"
             ]
         }
     ]
