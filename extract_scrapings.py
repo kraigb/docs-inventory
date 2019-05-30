@@ -65,7 +65,7 @@ def count_code_blocks(soup, languages):
     return count
 
 def extract_scrapings(input_file, output_file):    
-    print("extract-scrapings, INFO, Starting extraction, {}".format(input_file))
+    print("extract_scrapings, INFO, Starting extraction, {}".format(input_file))
 
     with open(input_file, encoding='utf-8') as f_in:
         import csv
@@ -96,14 +96,14 @@ def extract_scrapings(input_file, output_file):
                 file_count += 1
 
                 if file_count % 100 == 0:
-                    print("extract-scrapings, INFO, Files processed, {}".format(file_count))
+                    print("extract_scrapings, INFO, Files processed, {}".format(file_count))
 
                 # Go get the page content
                 try:
                     response = requests.get(url, headers=USER_AGENT)
                     response.raise_for_status()
                 except:
-                    print("extract-scrapings, WARNING, Request failed, {}".format(url))
+                    print("extract_scrapings, WARNING, Request failed, {}".format(url))
                     continue
 
                 page_text = response.text
@@ -133,12 +133,12 @@ def extract_scrapings(input_file, output_file):
 
                 writer.writerow(row)
 
-    print("extract-scrapings, INFO, INFO, Competed extraction,, {}".format(output_file))
+    print("extract_scrapings, INFO, INFO, Competed extraction,, {}".format(output_file))
 
 if __name__ == "__main__":
     if len(sys.argv) == 1:
-        print("Usage: python extract-scrapings <input_file>, {}".format(input_file))
-        print("<input_csv_file.csv> is the output from extract-metadata.py or consolidate.py")
+        print("Usage: python extract_scrapings <input_file>, {}".format(input_file))
+        print("<input_csv_file.csv> is the output from extract_metadata.py or consolidate.py")
 
     input_file = sys.argv[1]  # File is first argument; [0] is the .py file
 

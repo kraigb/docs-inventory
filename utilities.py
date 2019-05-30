@@ -11,7 +11,6 @@ WHITELIST_LANGUAGE_TAGS = ["python", "node", "js", "node.js", "typescript", "jav
 # Maps internal classification tags to labels in the CSV files
 TAGS = {
     "meta_title": "meta_title", 
-    "meta_title": "meta_title",
     "meta_description": "meta_description",
     "meta_keywords": "meta_keywords",
     "meta_other": "meta_other",
@@ -27,7 +26,8 @@ TAGS = {
     "code_inline": "code_inline",
     "code_block": "code_block",
     "text_intro": "text_intro",
-    "text": "text"
+    "text": "text",
+    "in_filename" : "in_filename"
 }    
 
 COLUMNS = {
@@ -72,7 +72,7 @@ def get_next_filename(prefix=None):
 
 
 def parse_config_arguments(argv):
-    """ Parses an arguments list for take-inventory.py, returning config file name. Any additional arguments after the options are included in the tuple."""
+    """ Parses an arguments list for take_inventory.py, returning config file name. Any additional arguments after the options are included in the tuple."""
     config_file = "config.json"
 
     try:
@@ -149,7 +149,7 @@ def make_identifier(name):
 def line_starts_with_metadata(line, path):
     # Output warnings for these (needs to be fixed in the source)
     if line.startswith("ï»¿---"):
-        print("take-inventory, WARNING, File is not utf-8 encoded, {}".format(path))
+        print("take_inventory, WARNING, File is not utf-8 encoded, , {}".format(path))
 
     return line.startswith("---") or line.startswith("ï»¿---")
 
@@ -233,11 +233,11 @@ def delineate_segments(content, path):
         if line_is_h1 or line_is_subheading:
             # Warn on missing h1, but treat this first subheading as the h1 anyway
             if not in_intro and line_is_subheading:
-                print("take-inventory, WARNING, Found subheading before finding an h1: '{}', {}".format(line.strip(), path))
+                print("take_inventory, WARNING, Found subheading before finding an h1, '{}', {}".format(line.strip(), path))
                 line_is_h1 = True
 
             if in_intro and line_is_h1:
-                print("take-inventory, WARNING, Found second h1: '{}', {}".format(line.strip(), path))
+                print("take_inventory, WARNING, Found second h1, '{}', {}".format(line.strip(), path))
 
             if not in_intro:
                 # Start tracking the intro text
@@ -247,7 +247,7 @@ def delineate_segments(content, path):
                 if line_is_subheading:                   
                     # Diagnostic check: output warning if subhead isn't an h2
                     if any(line.startswith(tag) for tag in ["### ", "<h3", "#### ", "<h4"]):
-                        print("take-inventory, WARNING, Found h3/h4 following h1: '{}', {}".format(line.strip(), path))
+                        print("take_inventory, WARNING, Found h3/h4 following h1, '{}', {}".format(line.strip(), path))
                 
                 item = start_line + 1, line_num - 1
                 intro.append(item)

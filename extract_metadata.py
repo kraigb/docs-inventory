@@ -1,8 +1,8 @@
-# Script to take the output of take-inventory.py (a .csv file), and go and open
+# Script to take the output of take_inventory.py (a .csv file), and go and open
 # the specific files therein to extract author, date, H1, and other metadata,
 # producing a second, more extensive .csv file (named with a "-metadata" suffix).
 #
-# take-inventory.py invokes this script automatically at the end of its processing
+# take_inventory.py invokes this script automatically at the end of its processing
 
 import sys
 from utilities import COLUMNS
@@ -14,7 +14,7 @@ def empty_metadata_values():
         'msservice' : '', 'mstopic' : '' }
 
 def extract_metadata(input_file, output_file):
-    print("extract-metadata, INFO, Starting metadata extraction, {}".format(input_file))
+    print("extract_metadata, INFO, Starting metadata extraction, , {}".format(input_file))
 
     with open(input_file, encoding='utf-8') as f_in:
         import csv
@@ -94,7 +94,7 @@ def extract_metadata(input_file, output_file):
                                     if any(line.startswith(value) for value in values):
                                         metadata_values[key] = line.split(":", 1)[1].strip()  # Remove metadata tag
                         except:
-                            print("extract-metadata, ERROR, Skipping file with encoding error. Open file and check for errors, {}".format(filename))
+                            print("extract_metadata, ERROR, Skipping file with encoding error, Open file and check for errors, {}".format(filename))
 
                     # At this point, all the metadata_values are set
 
@@ -105,12 +105,13 @@ def extract_metadata(input_file, output_file):
 
                 prev_file = filename
 
-    print("extract-metadata, INFO, Completed metadata extraction, {}".format(output_file))
+    print("extract_metadata, INFO, Completed metadata extraction, , {}".format(output_file))
 
 if __name__ == "__main__":
     if len(sys.argv) == 1:
         print("Usage: python extract_metadata.py <input_csv_file.csv>")
-        print("<input_csv_file.csv> is the output from take-inventory.py")
+        print("<input_csv_file.csv> is the output from take_inventory.py")
+        sys.exit(2)
 
     input_file = sys.argv[1]  # File is first argument; [0] is the .py file
 
