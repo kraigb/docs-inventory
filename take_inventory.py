@@ -121,8 +121,8 @@ def take_inventory(config, results_folder):
         consolidate_output = "{}-consolidated.csv".format(result_filename)
         consolidate(config, meta_output, consolidate_output)
 
-        print("take_inventory, INFO, Invoking secondary processing to apply scoring, , ")
-        score_output = "{}-score.csv".format(consolidate_output)
+        print("take_inventory, INFO, Invoking secondary processing to apply scoring, , ")        
+        score_output = "{}-scored.csv".format(result_filename)
         score(consolidate_output, score_output)
 
 if __name__ == "__main__":
