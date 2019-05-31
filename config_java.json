@@ -8,7 +8,7 @@
         },
         {
             "repo": "MicrosoftDocs/vsts-docs-pr",
-            "path": "${INVENTORY_REPO_ROOT}\\vsts-docs-public",
+            "path": "${INVENTORY_REPO_ROOT}\\vsts-docs-pr",
             "url": "https://docs.microsoft.com/azure/devops",
             "exclude_folders" : ["includes"]
         },
@@ -23,32 +23,21 @@
             "path": "${INVENTORY_REPO_ROOT}\\vscode-docs",
             "url": "https://code.visualstudio.com/docs",
             "exclude_folders" : ["includes", "release-notes", "blogs"]
-        }, 
+        },
         {
-            "repo": "MicrosoftDocs/azure-docs-sdk-python",
-            "path": "${INVENTORY_REPO_ROOT}\\azure-docs-sdk-python",
-            "url": "https://docs.microsoft.com/python/azure",
+            "repo": "Azure/azure-docs-sdk-java",
+            "path": "${INVENTORY_REPO_ROOT}\\azure-docs-sdk-java",
+            "url": "https://docs.microsoft.com/java/azure",
             "exclude_folders" : ["includes"]
         }
     ],
     "inventory": [
         {
-            "name": "Python",
+            "name": "Java",
             "terms": [
-                "Python",
-                "Flask",
-                "Django"
-            ]
-        },
-        {
-            "name": "JupyterML",
-            "terms": [
-                "Jupyter",
-                "Spark",
-                "data science",
-                "data-science",
-                "machine learning",
-                "machine-learning"
+                "Java[^Ss]",
+                "Maven",
+                "Spring"
             ]
         }
     ]

@@ -20,7 +20,7 @@ def get_file_data(config, results_folder):
 
     for content_set in config["content"]:
         docset = content_set.get("repo")
-        folder = content_set.get("path")
+        folder = os.path.expandvars(content_set.get("path"))  # Expands ${INVENTORY_REPO_ROOT}
         base_url = content_set.get("url")
         exclude_folders = content_set.get("exclude_folders")
 
@@ -102,7 +102,7 @@ if __name__ == "__main__":
     config_file, _ = parse_config_arguments(sys.argv[1:])
 
     if config_file is None:
-        print("Usage: python get-file-data.py --config <config_file>")
+        print("Usage: python get_file_data.py --config <config_file>")
         sys.exit(2)
 
     config = None
@@ -110,7 +110,13 @@ if __name__ == "__main__":
         config = json.load(config_load)
 
     if config is None:
-        print("Could not deserialize config file")
+        print("get_file_data: Could not deserialize config file")
+        sys.exit(1)
+
+    repo_folder = os.getenv("INVENTORY_REPO_FOLDER")
+    
+    if repo_folder is None:
+        print("get_file_data: Set environment variable INVENTORY_REPO_FOLDER to your repo root before running the script.")
         sys.exit(1)
 
     # Run the script in the 'InventoryData' folder (using the environment variable if it exists)

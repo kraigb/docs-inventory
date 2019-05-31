@@ -24,7 +24,7 @@ def take_inventory(config, results_folder):
 
     for content_set in config["content"]:
         docset = content_set.get("repo")
-        folder = content_set.get("path")
+        folder = os.path.expandvars(content_set.get("path"))  # Expands ${INVENTORY_REPO_ROOT}
         base_url = content_set.get("url")
         exclude_folders = content_set.get("exclude_folders")
 
@@ -138,7 +138,13 @@ if __name__ == "__main__":
         config = json.load(config_load)
 
     if config is None:
-        print("Could not deserialize config file")
+        print("take_inventory: Could not deserialize config file")
+        sys.exit(1)
+
+    repo_folder = os.getenv("INVENTORY_REPO_ROOT")
+    
+    if repo_folder is None:
+        print("take_inventory: Set environment variable INVENTORY_REPO_ROOT to your repo root before running the script.")
         sys.exit(1)
 
     # Run the script in the 'InventoryData' folder (using the environment variable if it exists)
