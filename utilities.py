@@ -5,7 +5,7 @@ import re
 import sys
 
 # List of known language terms
-WHITELIST_LANGUAGE_TAGS = ["python", "node", "js", "node.js", "typescript", "java"]
+WHITELIST_LANGUAGE_TAGS = ["python", "node", "js", "javascript", "node.js", "typescript", "java"]
 
 
 # Maps internal classification tags to labels in the CSV files
