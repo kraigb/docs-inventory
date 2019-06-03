@@ -13,10 +13,10 @@
             "exclude_folders" : ["includes"]
         },
         {
-            "repo": "MicrosoftDocs/visualstudio-docs-pr",
-            "path": "${INVENTORY_REPO_ROOT}\\visualstudio-docs-pr",
+            "repo": "MicrosoftDocs/visualstudio-docs-pr/docs",
+            "path": "${INVENTORY_REPO_ROOT}\\visualstudio-docs-pr\\docs",
             "url": "https://docs.microsoft.com/visualstudio",
-            "exclude_folders" : ["includes", "vs-2015", "mac", "subscriptions", "extensibility", "rtvs"]
+            "exclude_folders" : ["includes", "vs-2015", "extensibility", "rtvs"]
         },
         {
             "repo": "Microsoft/vscode-docs",
