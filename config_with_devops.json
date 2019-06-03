@@ -62,11 +62,8 @@
             "name": "JupyterML",
             "terms": [
                 "Jupyter",
-                "Spark",
                 "data science",
-                "data-science",
-                "machine learning",
-                "machine-learning"
+                "machine learning"
             ]
         },
         {
@@ -84,6 +81,50 @@
                 "TypeScript",
                 "Node.js",
                 "NPM"
+            ]
+        },
+        {
+            "name": "DevOps",
+            "terms": [
+                "DevOps",
+                "Azure DevOps",
+                "service endpoint",
+                "Azure DevOps Services",
+                "Repos",
+                "CI/CD",
+                "TFS",
+                "continuous deployment",
+                "continuous integration",
+                "work items",
+                "VSTS",
+                "Azure Pipelines",
+                "Azure DevOps Services organization",
+                "agile",
+                "the Azure DevOps Project",
+                "continuous delivery",
+                "Azure Repos",
+                "Team Services",
+                "release definition",
+                "Azure DevOps project",
+                "Team Foundation Server",
+                "Azure DevOps Git",
+                "Visual Studio Team Services",
+                "Azure DevOps organization",
+                "build definition",
+                "Visual Studio Online",
+                "Team Explorer",
+                "Visual Studio Marketplace",
+                "team project",
+                "Release Management",
+                "Azure DevOps Services project",
+                "sprint plan",
+                "private agent",
+                "VSO",
+                "VSTS account",
+                "Azure DevOps Marketplace",
+                "VSTS Git",
+                "Boards",
+                "VSTS project"
             ]
         }
     ]

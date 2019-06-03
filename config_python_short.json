@@ -14,7 +14,7 @@
     ],
     "inventory": [
         {
-            "name": "Python",
+            "name": "PythonShort",
             "terms": [
                 "Python",
                 "Flask",
