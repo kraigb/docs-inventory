@@ -68,10 +68,8 @@ def consolidate(config, input_file, output_file):
         
         for i in range(0, len(tags)):        
             headers.insert(index_tags_new + i, make_identifier(tags[i]))            
-
-        # Add column for the count of terms in the filename
-        index_filename_count = index_tags_new + i + 1
-        headers.insert(index_filename_count, COLUMNS["in_filename"])
+        
+        index_filename_count = index_tags_new + i
 
         with open(output_file, 'w', encoding='utf-8', newline='') as f_out:        
             writer = csv.writer(f_out)
