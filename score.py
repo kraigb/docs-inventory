@@ -27,25 +27,25 @@ def score(input_file, output_file):
 
             while current_row is not None:
 
-                # Calculate and insert the score, which in this code means:
-                #    text_intro + text >= 3 (0 or 1)
+                # Calculate and insert the score.
                 #
-                # Multiplied by (a logical AND)
-                #    Sum of meta_title, meta_description, meta_keywords, h1_heading, subheading, code_fence,
-                #    and in_filename. (Sum is logical OR)
+                # Factors:
+                #    text_score: link_text + text_intro + text
+                #    non_text_score: Sum of meta_title, meta_description, meta_keywords, h1_heading, subheading, code_fence, and in_filename
                 #
-                # The resulting value gives zeros for "not interesting" and a weighted value for the 
-                # interesting stuff, which can be sorted in the output.
-                text_cols = ["text_intro", "text"]
-                occurrence_cols = ["meta_title", "meta_description", "meta_keywords", "h1_heading", "subheading",
-                    "code_fence", "in_filename"]
 
+                text_cols = ["link_text", "text_intro", "text"]
                 text_score = sum(int(current_row[headers.index(TAGS[column])]) for column in text_cols)
-                text_score = text_score if text_score >= 3 else 0
+                
+                non_text_cols = ["meta_title", "meta_description", "meta_keywords", "h1_heading", "subheading", "code_fence", "in_filename"]
+                non_text_score = sum(int(current_row[headers.index(TAGS[column])]) for column in non_text_cols)
 
-                occurrence_score = sum(int(current_row[headers.index(TAGS[column])]) for column in occurrence_cols)
-
-                score = text_score * occurrence_score
+                # The first case here catches instances with a high text count but without the term showing up in the non_text_score areas.
+                if non_text_score == 0 and text_score >= 6:
+                    score = text_score
+                else:
+                    # Otherwise, score as non-zero anything with text_score >=3, multiplying by non_text_score to give a weigting of sorts.
+                    score = text_score * non_text_score if text_score >= 3 else 0                
 
                 # Write score only if non-zero
                 if score != 0:
