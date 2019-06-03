@@ -63,13 +63,12 @@ def consolidate(config, input_file, output_file):
             headers.insert(index_term + i, make_identifier(terms[i]))
 
         headers.insert(index_term + i + 1, COLUMNS["term_total"])
-
         index_tags_new = index_term + i + 2   # Index for inserting tabs after term counts
         
         for i in range(0, len(tags)):        
             headers.insert(index_tags_new + i, make_identifier(tags[i]))            
         
-        index_filename_count = index_tags_new + i
+        index_filename_count = len(tags) - 1
 
         with open(output_file, 'w', encoding='utf-8', newline='') as f_out:        
             writer = csv.writer(f_out)
@@ -114,14 +113,15 @@ def consolidate(config, input_file, output_file):
                 # Add one more row with the total count of terms, which accommodates sorting
                 current_row.insert(index_term + i + 1, total)
 
-                # Add the tag count columns
-                for i in range(0, len(tags)):
-                    current_row.insert(index_tags_new + i, tag_counts[i])                
-
+                # Add the tag count columns after patching up the in_filename count,
+                # which we have to do separately.
                 # Add the filename occurrence count                
                 filename = current_row[index_filename].lower()
                 filename_total = sum(filename.count(term.lower()) for term in terms)
-                current_row.insert(index_filename_count, filename_total)
+                tag_counts[index_filename_count] = filename_total
+
+                for i in range(0, len(tags)):
+                    current_row.insert(index_tags_new + i, tag_counts[i])                
 
                 # Write the row
                 writer.writerow(current_row)
