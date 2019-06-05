@@ -67,7 +67,7 @@ def take_inventory(config, results_folder):
                     if name not in results:
                         results[name] = []
 
-                    for term in terms[name]:
+                    for term in terms[name]:                        
                         for match in term.finditer(content):
                             line_start = content.rfind("\n", 0, match.span()[0])
                             line_start = 0 if line_start == -1 else line_start  # Handle BOF case

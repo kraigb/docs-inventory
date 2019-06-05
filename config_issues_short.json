@@ -1,6 +1,18 @@
 {
     "content": [
         {
+            "repo": "MicrosoftDocs/azure-docs-pr",
+            "path": "${INVENTORY_REPO_ROOT}\\azure-docs-pr\\articles\\active-directory",
+            "url": "http://docs.microsoft.com/azure",
+            "exclude_folders" : ["includes", "markdown templates"]
+        },
+        {
+            "repo": "Microsoft/vscode-docs",
+            "path": "${INVENTORY_REPO_ROOT}\\vscode-docs",
+            "url": "https://code.visualstudio.com/docs",
+            "exclude_folders" : ["includes", "release-notes", "blogs"]
+        }, 
+        {
             "repo": "Azure/azure-docs-sdk-java",
             "path": "${INVENTORY_REPO_ROOT}\\azure-docs-sdk-java",
             "url": "https://docs.microsoft.com/java/azure",
@@ -21,10 +33,17 @@
     ],
     "inventory": [
         {
-            "name": "Issues",
+            "name": "GenderIssues",
             "terms": [
-                "na"
+                "(\\bhe\\b | \\bhim\\b | \\bhis\\b | \\bhimself\\b)",
+                "(\\bshe\\b | \\bher\\b | \\bhers\\b | \\bherself\\b)"
             ]
-        }
+        },
+        {
+            "name": "AbilityIssues",
+            "terms": [
+                "(\\byou can see\\b | \\bas seen\\b)"
+            ]
+        }        
     ]
 }

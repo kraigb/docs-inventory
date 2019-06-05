@@ -77,7 +77,10 @@ def consolidate(config, input_file, output_file):
             term_counts = [0] * len(terms)
             tag_counts = [0] * len(tags)
 
-            current_row = next(reader)
+            try:
+                current_row = next(reader)
+            except:
+                current_row = None
 
             while current_row is not None:
                 if current_row == None:
