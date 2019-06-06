@@ -10,7 +10,7 @@
             "repo": "MicrosoftDocs/vsts-docs-pr",
             "path": "${INVENTORY_REPO_ROOT}\\vsts-docs-public",
             "url": "https://docs.microsoft.com/azure/devops",
-            "exclude_folders" : ["includes", "_shared"]
+            "exclude_folders" : ["includes", "_shared", "release-notes"]
         },
         {
             "repo": "MicrosoftDocs/visualstudio-docs-pr",
