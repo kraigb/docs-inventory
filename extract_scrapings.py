@@ -28,8 +28,23 @@ def count_intro_links(soup):
 
     count = 0
 
-    while next_element and next_element.name != "h2":        
-        count += len(next_element.find_all('a'))
+    while next_element and next_element.name != "h2": 
+        link_elements = next_element.find_all('a')
+
+        for link in link_elements:
+            # Check if we're in a selector div, whose third parent is a div with "op_single_selector".
+            # If so, don't count this link.
+
+            add_count = 1
+
+            try:
+                if link.parent.parent.parent.attrs["class"][0] == "op_single_selector":
+                    add_count = 0
+            except:
+                pass
+        
+            count += add_count
+            
         next_element = next_element.find_next_sibling()
 
     return count
@@ -104,6 +119,12 @@ def extract_scrapings(input_file, output_file):
                     response.raise_for_status()
                 except:
                     print("extract_scrapings, WARNING, Request failed, {}".format(url))
+
+                    # Write the row with -1's so we can a failed request in the output                    
+                    for i in range(0,7):
+                        row.append(-1)
+                        
+                    writer.writerow(row)
                     continue
 
                 page_text = response.text
