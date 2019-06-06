@@ -4,25 +4,19 @@
             "repo": "MicrosoftDocs/azure-docs-pr",
             "path": "${INVENTORY_REPO_ROOT}\\azure-docs-pr",
             "url": "http://docs.microsoft.com/azure",
-            "exclude_folders" : ["includes", "markdown templates"]
+            "exclude_folders" : ["includes", "markdown templates", "portal-articles"]
         },
         {
             "repo": "MicrosoftDocs/vsts-docs-pr",
             "path": "${INVENTORY_REPO_ROOT}\\vsts-docs-pr",
             "url": "https://docs.microsoft.com/azure/devops",
-            "exclude_folders" : ["includes"]
+            "exclude_folders" : ["includes", "_shared"]
         },
         {
-            "repo": "MicrosoftDocs/visualstudio-docs-pr/docs",
-            "path": "${INVENTORY_REPO_ROOT}\\visualstudio-docs-pr\\docs",
+            "repo": "MicrosoftDocs/visualstudio-docs-pr",
+            "path": "${INVENTORY_REPO_ROOT}\\visualstudio-docs-pr",
             "url": "https://docs.microsoft.com/visualstudio",
-            "exclude_folders" : ["includes", "vs-2015", "extensibility", "rtvs"]
-        },
-        {
-            "repo": "MicrosoftDocs/visualstudio-docs-pr/scripting-docs",
-            "path": "${INVENTORY_REPO_ROOT}\\visualstudio-docs-pr\\scripting-docs",
-            "url": "https://docs.microsoft.com/scripting-docs",
-            "exclude_folders" : ["includes"]
+            "exclude_folders" : ["includes", "mac", "subscriptions", "vs-2015", "extensibility", "rtvs"]
         },
         {
             "repo": "Microsoft/vscode-docs",
