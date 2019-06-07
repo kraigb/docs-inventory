@@ -4,25 +4,22 @@ import os
 import re
 import sys
 
-
 def get_next_filename(prefix=None):    
     """ Determine the next filename by incrementing 1 above the largest existing file number in the current folder for today's date."""
 
     today = datetime.date.today()
 
-    date_pattern = 'results_' + str(today)
+    date_pattern = prefix + '-results_' + str(today)
     files = [f for f in os.listdir('.') if re.match(date_pattern + '-[0-9]+.csv', f)]
 
     if (len(files) == 0):
         next_num = 1
     else:
-        file_nums = [item[19:23] for item in files ]
+        num_start_index = len(prefix) + 20  # position of "0001" and such
+        file_nums = [item[num_start_index:num_start_index + 4] for item in files ]
         next_num = max(int(n) for n in file_nums) + 1
 
-    filename = "%s-%04d" % (date_pattern, next_num) 
-    if prefix is not None:
-        return "{}-{}".format(prefix, filename)
-    return filename
+    return "%s-%04d" % (date_pattern, next_num) 
 
 
 def parse_config_arguments(argv):

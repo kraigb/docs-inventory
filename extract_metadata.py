@@ -15,11 +15,11 @@ def extract_metadata(input_file, output_file):
         reader = csv.reader(f_in)    
         
         with open(output_file, 'w', encoding='utf-8', newline='') as f_out:
-            # Output file order is docset, file, URL, term, msauthor, author, msdate, mssservice, line,
+            # Output file order is docset, file, URL, term, msauthor, author, msdate, mssservice, mstopic, line,
             # extract, H1, title, and description
             
             writer = csv.writer(f_out)
-            writer.writerow(['Docset', 'File', 'URL', 'Term', 'MSAuthor', 'Author', 'Manager', 'MSDate', 'MSService', 'Line', 'Extract', 'H1', 'Title', 'Description'])
+            writer.writerow(['Docset', 'File', 'URL', 'Term', 'MSAuthor', 'Author', 'Manager', 'MSDate', 'MSService', 'MSTopic', 'Line', 'Extract', 'H1', 'Title', 'Description'])
 
             # As we iterate on the rows in the input file, if the filename is the same as the
             # previous iteration, we use the same metadata values from that iteration to avoid
@@ -29,10 +29,10 @@ def extract_metadata(input_file, output_file):
             h1 = ''
 
             # The strings we look for to find metadata
-            metadata_text = { 'title' : 'title:', 'description' : 'description:', 'msdate' : 'ms.date:', 'author' : 'author:', 'msauthor' : 'ms.author:', 'manager' : 'manager:', 'msservice' : 'ms.service:'}
+            metadata_text = { 'title' : 'title:', 'description' : 'description:', 'msdate' : 'ms.date:', 'author' : 'author:', 'msauthor' : 'ms.author:', 'manager' : 'manager:', 'msservice' : 'ms.service:', 'mstopic' : 'ms.topic'}
             
             # The metadata values we find, which we carry from row to row
-            metadata_values = { 'title' : '', 'description': '', 'msdate' : '', 'author' : '', 'msauthor' : '', 'manager' : '', 'msservice' : ''}
+            metadata_values = { 'title' : '', 'description': '', 'msdate' : '', 'author' : '', 'msauthor' : '', 'manager' : '', 'msservice' : '', 'mstopic' : ''}
             
             next(reader)  # Skip the header line
 
@@ -53,7 +53,7 @@ def extract_metadata(input_file, output_file):
                 else:
                     # Reset metadata values in case one or more of them aren't present; we don't want previous
                     # values to accidentally carry over.
-                    metadata_values = { 'title' : '', 'description': '', 'msdate' : '', 'author' : '', 'msauthor' : '', 'manager' : '', 'msservice' : ''}
+                    metadata_values = { 'title' : '', 'description': '', 'msdate' : '', 'author' : '', 'msauthor' : '', 'manager' : '', 'msservice' : '', 'mstopic' : ''}
                     h1 = ''
 
                     with open(filename, encoding='utf-8') as docfile:
@@ -87,7 +87,7 @@ def extract_metadata(input_file, output_file):
 
                 writer.writerow([docset, filename, url, term, metadata_values['msauthor'],
                                 metadata_values['author'], metadata_values['manager'],
-                                metadata_values['msdate'], metadata_values['msservice'],
+                                metadata_values['msdate'], metadata_values['msservice'], metadata_values['mstopic'],
                                 line_number, extract, h1, metadata_values['title'], metadata_values['description']])
 
                 prev_file = filename

@@ -1,0 +1,52 @@
+{
+    "content": [
+        {
+            "repo": "MicrosoftDocs/azure-docs-pr",
+            "path": "d:\\g\\azure-docs-pr",
+            "url": "http://docs.microsoft.com/azure",
+            "exclude_folders" : ["includes", "markdown templates"]
+        },
+        {
+            "repo": "MicrosoftDocs/vsts-docs-pr",
+            "path": "d:\\g\\vsts-docs-public",
+            "url": "https://docs.microsoft.com/azure/devops",
+            "exclude_folders" : ["includes"]
+        },
+        {
+            "repo": "MicrosoftDocs/visualstudio-docs-pr",
+            "path": "d:\\g\\visualstudio-docs-pr",
+            "url": "https://docs.microsoft.com/visualstudio",
+            "exclude_folders" : ["includes", "vs-2015", "mac", "subscriptions", "extensibility", "rtvs"]
+        },
+        {
+            "repo": "Microsoft/vscode-docs",
+            "path": "d:\\g\\vscode-docs",
+            "url": "https://code.visualstudio.com/docs",
+            "exclude_folders" : ["includes", "release-notes", "blogs"]
+        }, 
+        {
+            "repo": "MicrosoftDocs/azure-docs-sdk-python",
+            "path": "d:\\g\\azure-docs-sdk-python",
+            "url": "https://docs.microsoft.com/python/azure",
+            "exclude_folders" : ["includes"]
+        }
+    ],
+    "inventory": [
+        {
+            "name": "Python",
+            "terms": [
+                "Python",
+                "Flask",
+                "Django"
+            ]
+        },
+        {
+            "name": "JupyterML",
+            "terms": [
+                "Jupyter",
+                "data science",
+                "machine learning"
+            ]
+        }
+    ]
+}
