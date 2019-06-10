@@ -4,7 +4,7 @@
             "repo": "MicrosoftDocs/azure-docs-pr",
             "path": "${INVENTORY_REPO_ROOT}\\azure-docs-pr",
             "url": "http://docs.microsoft.com/azure",
-            "exclude_folders" : ["includes", "markdown templates", "portal-articles"]
+            "exclude_folders" : ["includes", "markdown templates", "portal-articles", "saas-apps"]
         },
         {
             "repo": "MicrosoftDocs/vsts-docs-pr",
