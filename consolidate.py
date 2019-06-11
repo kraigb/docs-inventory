@@ -1,4 +1,4 @@
-# Script to take the output of take-inventory.py or extract-metadata.py (.csv files), and
+# Script to take the output of take_inventory.py or extract_metadata.py (.csv files), and
 # consolidate the entries by filename, making columns for the different terms involved (and count).
 # The terms are loaded from terms.txt and are used to make the columns.
 #
@@ -9,57 +9,78 @@
 #
 # Other fields are left as-is.
 #
-# take-inventory.py invokes this script automatically at the end of its processing using the output from
-# extract-metadata.py.
+# take_inventory.py invokes this script automatically at the end of its processing using the output from
+# extract_metadata.py.
 #
-# Note that this script depends on the CSV file being sorted by filename, as take-inventory.py produces.
+# Note that this script depends on the CSV file being sorted by filename, as take_inventory.py produces.
 
 import sys
 import json
-from utilities import parse_config_arguments, make_identifier
+from utilities import parse_config_arguments, make_identifier, TAGS, COLUMNS
 
 def consolidate(config, input_file, output_file):
-    print("consolidate: Starting consolidation")
+    print("consolidate, INFO, Starting consolidation, {}".format(input_file))
 
-    prefix = input_file.split('-')[0].lower()
+    prefix = input_file.split('_')[0].lower()
     terms = None
+
     for content_set in config["inventory"]:
         if content_set["name"].lower() == prefix:
             terms = content_set["terms"]
             break
 
     if terms is None:
-        print("Could not find terms for {}".format(prefix))
+        print("consolidate, ERROR, Could not find terms for {}, {}".format(prefix, input_file))
         sys.exit(1)
+    
+    tags = list(TAGS.values())
 
     with open(input_file, encoding='utf-8') as f_in:
         import csv    
         reader = csv.reader(f_in)    
         headers = next(reader)
         
-        # Replace "Term" columns with individual terms; also remove Line and Extract (not meaningful)
-        index_term = headers.index("Term")
-        index_line = headers.index("Line")
-        index_extract = headers.index("Extract")    
-        headers.remove("Term")
-        headers.remove("Line")
-        headers.remove("Extract")
+        # We'll replace the "Term" column with individual terms; Tags is also expanded to the distinct
+        # classification tags. We also remove Line and Extract because they're no longer meaningful.
+        index_filename = headers.index(COLUMNS["file"])
+        index_term = headers.index(COLUMNS["term"])
+        index_tag = headers.index(COLUMNS["tag"])
+        index_line = headers.index(COLUMNS["line"])
+        index_extract = headers.index(COLUMNS["extract"])
 
-        # Insert columns for each of the terms, plus a "Term_Total" column.
-        # All of these columns should be named with valid Python identifiers, which the make_identifier
+        headers.remove(COLUMNS["term"])
+        headers.remove(COLUMNS["tag"])
+        headers.remove(COLUMNS["line"])
+        headers.remove(COLUMNS["extract"])
+
+        # Insert columns for each of the terms, plus a "Term_Total" column. Also insert columns for each of 
+        # the tags.
+        #
+        # NOTE: all of these columns should be named with valid Python identifiers, which the make_identifier
         # function guarantees.
 
         for i in range(0, len(terms)):
             headers.insert(index_term + i, make_identifier(terms[i]))
 
-        headers.insert(index_term + i + 1, "Term_Total")  # Note underscore in column name
+        headers.insert(index_term + i + 1, COLUMNS["term_total"])
+        index_tags_new = index_term + i + 2   # Index for inserting tabs after term counts
+        
+        for i in range(0, len(tags)):        
+            headers.insert(index_tags_new + i, make_identifier(tags[i]))            
+        
+        index_filename_count = len(tags) - 1
 
         with open(output_file, 'w', encoding='utf-8', newline='') as f_out:        
             writer = csv.writer(f_out)
             writer.writerow(headers)
 
             term_counts = [0] * len(terms)
-            current_row = next(reader)
+            tag_counts = [0] * len(tags)
+
+            try:
+                current_row = next(reader)
+            except:
+                current_row = None
 
             while current_row is not None:
                 if current_row == None:
@@ -70,17 +91,20 @@ def consolidate(config, input_file, output_file):
                 term = current_row[index_term]
                 term_counts[terms.index(term)] += 1
 
+                tag = current_row[index_tag]
+                tag_counts[tags.index(tag)] += 1
+
                 # If the filename in the next row is the same, continue with the next line
                 if next_row != None and current_row[1] == next_row[1]:
                     current_row = next_row
                     continue
 
-                # Otherwise, write the term count columns
-                # First, remove the Extract, Line, and Term columns, which are no longer relevant.
-                # We do this in reverse order because we're using indices. Note that this does assume
-                # the ordering generated by take-inventory.py and extract-metadata.py.
+                # Otherwise, write the term count columns. But first, remove the Extract, Line, Tag, and Term columns,
+                # which are no longer relevant. We do this in reverse order because we're using indices. Note that
+                # this does assume the ordering generated by take_inventory.py and extract_metadata.py.
                 current_row.pop(index_extract)
                 current_row.pop(index_line)
+                current_row.pop(index_tag)
                 current_row.pop(index_term)
 
                 total = 0
@@ -89,8 +113,18 @@ def consolidate(config, input_file, output_file):
                     current_row.insert(index_term + i, term_counts[i])                
                     total += term_counts[i]
 
-                # Add one more row with the total count of terms, which accomodates sorting
+                # Add one more row with the total count of terms, which accommodates sorting
                 current_row.insert(index_term + i + 1, total)
+
+                # Add the tag count columns after patching up the in_filename count,
+                # which we have to do separately.
+                # Add the filename occurrence count                
+                filename = current_row[index_filename].lower()
+                filename_total = sum(filename.count(term.lower()) for term in terms)
+                tag_counts[index_filename_count] = filename_total
+
+                for i in range(0, len(tags)):
+                    current_row.insert(index_tags_new + i, tag_counts[i])                
 
                 # Write the row
                 writer.writerow(current_row)
@@ -98,16 +132,17 @@ def consolidate(config, input_file, output_file):
                 # Reset state for the next round, including the counts
                 current_row = next_row
                 term_counts = [0] * len(terms)
+                tag_counts = [0] * len(tags)
 
-    print("consolidate: Consolidation complete")
+    print("consolidate, INFO, Consolidation complete, ,")
 
 if __name__ == "__main__":
     config_file, args = parse_config_arguments(sys.argv[1:])
 
     if config_file == None:
         print("Usage: python consolidate.py --config=<config_file> <input_csv_file.csv>")
-        print("<input_csv_file.csv> is the output from take-inventory.py or extract-metadata.py and should be sorted by filename.")
-        print("<config_file> should be the same one given to take-inventory.py.")
+        print("<input_csv_file.csv> is the output from take_inventory.py or extract_metadata.py and should be sorted by filename.")
+        print("<config_file> should be the same one given to take_inventory.py.")
         sys.exit(2)
 
     # Making the output filename assumes the input filename has only one .

@@ -3,7 +3,10 @@
 .env
 .winenv
 __pycache__
+.pytest_cache
 
 # Runtime files
+InventoryData/*
+IssueData/*
 *.csv
 *.xls*

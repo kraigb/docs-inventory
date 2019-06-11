@@ -1,0 +1,45 @@
+{
+    "content": [
+        {
+            "repo": "MicrosoftDocs/azure-docs-pr",
+            "path": "${INVENTORY_REPO_ROOT}\\azure-docs-pr",
+            "url": "http://docs.microsoft.com/azure",
+            "exclude_folders" : ["includes", "markdown templates", "portal-articles"]
+        },
+        {
+            "repo": "MicrosoftDocs/vsts-docs-pr",
+            "path": "${INVENTORY_REPO_ROOT}\\vsts-docs-public",
+            "url": "https://docs.microsoft.com/azure/devops",
+            "exclude_folders" : ["includes", "_shared", "release-notes"]
+        },
+        {
+            "repo": "MicrosoftDocs/visualstudio-docs-pr",
+            "path": "${INVENTORY_REPO_ROOT}\\visualstudio-docs-pr",
+            "url": "https://docs.microsoft.com/visualstudio",
+            "exclude_folders" : ["includes", "scripting-docs", "mac", "subscriptions", "vs-2015", "extensibility", "rtvs"]
+        },        
+        {
+            "repo": "Microsoft/vscode-docs",
+            "path": "${INVENTORY_REPO_ROOT}\\vscode-docs",
+            "url": "https://code.visualstudio.com/docs",
+            "exclude_folders" : ["includes", "release-notes", "blogs"]
+        },
+        {
+            "repo": "MicrosoftDocs/azure-docs-sdk-node",
+            "path": "${INVENTORY_REPO_ROOT}\\azure-docs-sdk-node",
+            "url": "https://docs.microsoft.com/javascript/azure",
+            "exclude_folders" : ["includes"]
+        }
+    ],
+    "inventory": [
+        {
+            "name": "JavaScript",
+            "terms": [
+                "JavaScript",
+                "TypeScript",
+                "Node.js",
+                "NPM"
+            ]        
+        }
+    ]
+}

@@ -4,7 +4,7 @@
             "repo": "MicrosoftDocs/azure-docs-pr",
             "path": "${INVENTORY_REPO_ROOT}\\azure-docs-pr",
             "url": "http://docs.microsoft.com/azure",
-            "exclude_folders" : ["includes", "markdown templates", "portal-articles", "saas-apps"]
+            "exclude_folders" : ["includes", "markdown templates", "portal-articles"]
         },
         {
             "repo": "MicrosoftDocs/vsts-docs-pr",
@@ -16,7 +16,7 @@
             "repo": "MicrosoftDocs/visualstudio-docs-pr",
             "path": "${INVENTORY_REPO_ROOT}\\visualstudio-docs-pr",
             "url": "https://docs.microsoft.com/visualstudio",
-            "exclude_folders" : ["includes", "mac", "subscriptions", "vs-2015", "extensibility", "rtvs"]
+            "exclude_folders" : ["includes", "vs-2015", "extensibility", "rtvs"]
         },
         {
             "repo": "Microsoft/vscode-docs",
@@ -45,40 +45,17 @@
     ],
     "inventory": [
         {
-            "name": "Python",
+            "name": "GenderPronouns",
             "terms": [
-                "Python",
-                "Flask",
-                "Django"
+                "(\\bhe\\b | \\bhim\\b | \\bhis\\b | \\bhimself\\b)",
+                "(\\bshe\\b | \\bher\\b | \\bhers\\b | \\bherself\\b)"
             ]
         },
         {
-            "name": "JupyterML",
+            "name": "VisionVerbs",
             "terms": [
-                "Jupyter",
-                "Spark",
-                "data science",
-                "data-science",
-                "machine learning",
-                "machine-learning"
+                "(\\byou can see\\b | \\bas seen\\b)"
             ]
-        },
-        {
-            "name": "Java",
-            "terms": [
-                "Java[^Ss]",
-                "Maven",
-                "Spring"
-            ]
-        },
-        {
-            "name": "JavaScript",
-            "terms": [
-                "JavaScript",
-                "TypeScript",
-                "Node.js",
-                "NPM"
-            ]
-        }
+        }  
     ]
 }
