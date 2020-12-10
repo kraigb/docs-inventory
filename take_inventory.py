@@ -50,7 +50,7 @@ def take_inventory(config, results_folder):
                 full_path = os.path.join(root, file)
 
                 try:
-                    content = pathlib.Path(full_path).read_text(errors="ignore")
+                    content = pathlib.Path(full_path).read_text(errors="replace")
                 except UnicodeDecodeError:
                     print("take_inventory, WARNING, Skipping file that contains non-UTF-8 characters and should be converted, , {}".format(full_path))
                     continue

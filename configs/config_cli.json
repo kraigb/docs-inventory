@@ -1,0 +1,24 @@
+{
+    "content": [
+        {
+            "repo": "MicrosoftDocs/azure-docs-pr",
+            "path": "${INVENTORY_REPO_ROOT}\\azure-docs-pr",
+            "url": "https://docs.microsoft.com/azure",
+            "exclude_folders" : ["includes", "_shared", "release-notes"]
+        }
+    ],
+    "inventory": [
+        {
+            "name": "CLI",
+            "terms": [
+                "terminal",
+                "command window",
+                "command prompt",
+                "bash",
+                "console",
+                "shell",
+                "powershell window"    
+            ]
+        }
+    ]
+}

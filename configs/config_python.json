@@ -1,6 +1,18 @@
 {
     "content": [
         {
+            "repo": "MicrosoftDocs/azure-docs-pr",
+            "path": "${INVENTORY_REPO_ROOT}\\azure-docs-pr",
+            "url": "http://docs.microsoft.com/azure",
+            "exclude_folders" : ["includes", "markdown templates", "portal-articles"]
+        },
+        {
+            "repo": "MicrosoftDocs/vsts-docs-pr",
+            "path": "${INVENTORY_REPO_ROOT}\\vsts-docs-pr",
+            "url": "https://docs.microsoft.com/azure/devops",
+            "exclude_folders" : ["includes", "_shared", "release-notes"]
+        },
+        {
             "repo": "MicrosoftDocs/visualstudio-docs-pr",
             "path": "${INVENTORY_REPO_ROOT}\\visualstudio-docs-pr",
             "url": "https://docs.microsoft.com/visualstudio",
@@ -11,7 +23,7 @@
             "path": "${INVENTORY_REPO_ROOT}\\vscode-docs",
             "url": "https://code.visualstudio.com/docs",
             "exclude_folders" : ["includes", "release-notes", "blogs"]
-        },        
+        }, 
         {
             "repo": "MicrosoftDocs/azure-docs-sdk-python",
             "path": "${INVENTORY_REPO_ROOT}\\azure-docs-sdk-python",
@@ -21,11 +33,22 @@
     ],
     "inventory": [
         {
-            "name": "PythonShort",
+            "name": "Python",
             "terms": [
                 "Python",
                 "Flask",
                 "Django"
+            ]
+        },
+        {
+            "name": "JupyterML",
+            "terms": [
+                "Jupyter",
+                "Spark",
+                "data science",
+                "data-science",
+                "machine learning",
+                "machine-learning"
             ]
         }
     ]

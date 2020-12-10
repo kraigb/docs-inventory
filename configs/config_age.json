@@ -1,0 +1,9 @@
+{
+    "content": [
+        {
+            "repo": "Azure/azure-dev-docs-pr",
+            "path": "${INVENTORY_REPO_ROOT}\\azure-dev-docs-pr\\articles",            
+            "exclude_folders" : ["breadcrumb", "media"]
+        }    
+    ]
+}

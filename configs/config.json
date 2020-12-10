@@ -4,11 +4,11 @@
             "repo": "MicrosoftDocs/azure-docs-pr",
             "path": "${INVENTORY_REPO_ROOT}\\azure-docs-pr",
             "url": "http://docs.microsoft.com/azure",
-            "exclude_folders" : ["includes", "markdown templates", "portal-articles"]
+            "exclude_folders" : ["includes", "markdown templates", "portal-articles", "saas-apps"]
         },
         {
             "repo": "MicrosoftDocs/vsts-docs-pr",
-            "path": "${INVENTORY_REPO_ROOT}\\vsts-docs-public",
+            "path": "${INVENTORY_REPO_ROOT}\\vsts-docs-pr",
             "url": "https://docs.microsoft.com/azure/devops",
             "exclude_folders" : ["includes", "_shared", "release-notes"]
         },
@@ -16,18 +16,18 @@
             "repo": "MicrosoftDocs/visualstudio-docs-pr",
             "path": "${INVENTORY_REPO_ROOT}\\visualstudio-docs-pr",
             "url": "https://docs.microsoft.com/visualstudio",
-            "exclude_folders" : ["includes", "scripting-docs", "mac", "subscriptions", "vs-2015", "extensibility", "rtvs"]
+            "exclude_folders" : ["includes", "mac", "subscriptions", "vs-2015", "extensibility", "rtvs"]
         },
         {
             "repo": "Microsoft/vscode-docs",
             "path": "${INVENTORY_REPO_ROOT}\\vscode-docs",
             "url": "https://code.visualstudio.com/docs",
             "exclude_folders" : ["includes", "release-notes", "blogs"]
-        }, 
+        },
         {
-            "repo": "MicrosoftDocs/azure-docs-sdk-python",
-            "path": "${INVENTORY_REPO_ROOT}\\azure-docs-sdk-python",
-            "url": "https://docs.microsoft.com/python/azure",
+            "repo": "Azure/azure-dev-docs",
+            "path": "${INVENTORY_REPO_ROOT}\\azure-dev-docs-pr",
+            "url": "https://docs.microsoft.com/azure",
             "exclude_folders" : ["includes"]
         }
     ],
@@ -49,6 +49,23 @@
                 "data-science",
                 "machine learning",
                 "machine-learning"
+            ]
+        },
+        {
+            "name": "Java",
+            "terms": [
+                "Java[^Ss]",
+                "Maven",
+                "Spring"
+            ]
+        },
+        {
+            "name": "JavaScript",
+            "terms": [
+                "JavaScript",
+                "TypeScript",
+                "Node.js",
+                "NPM"
             ]
         }
     ]

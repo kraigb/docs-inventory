@@ -1,6 +1,7 @@
 # Environment folders
 .vscode
-.env
+.env/*
+.venv/*
 .winenv
 __pycache__
 .pytest_cache
@@ -10,3 +11,5 @@ InventoryData/*
 IssueData/*
 *.csv
 *.xls*
+
+tally*.json

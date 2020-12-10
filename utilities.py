@@ -5,7 +5,7 @@ import re
 import sys
 
 # List of known language terms
-WHITELIST_LANGUAGE_TAGS = ["python", "node", "js", "javascript", "node.js", "typescript", "java"]
+ALLOWLIST_LANGUAGE_TAGS = ["python", "node", "js", "javascript", "node.js", "typescript", "java"]
 
 
 # Maps internal classification tags to labels in the CSV files
@@ -91,7 +91,7 @@ def parse_config_arguments(argv):
 
 
 def parse_endpoint_key_arguments(argv):
-    """ Parses an arguments list for extract-key-phrases.py, returning an endpoint and API key (tuple), with no defaults. Any additional arguments after the options are included in the tuple."""
+    """ Parses an arguments list for extract_key_phrases.py, returning an endpoint and API key (tuple), with no defaults. Any additional arguments after the options are included in the tuple."""
 
     endpoint = None
     key = None
@@ -114,7 +114,7 @@ def parse_endpoint_key_arguments(argv):
     return (endpoint, key, args)
 
 def parse_filters_arguments(argv):
-    """ Parses an arguments list for apply-filters.py, returning a filters file and additional args in a tuple."""
+    """ Parses an arguments list for apply_filters.py, returning a filters file and additional args in a tuple."""
     filters_file = 'filters.txt'    
 
     try:
@@ -263,8 +263,8 @@ def delineate_segments(content, path):
     return code_blocks, intro, metadata
 
 
-def is_whitelist_language(term):
-    return True if term.lower() in WHITELIST_LANGUAGE_TAGS else False
+def is_allowlist_language(term):
+    return True if term.lower() in ALLOWLIST_LANGUAGE_TAGS else False
 
 
 def is_codefence(line, term):
@@ -274,7 +274,7 @@ def is_codefence(line, term):
     line = line.lower().strip()  # Remove whitespace to account for instances where code fence has spaces after it
     term_lower = term.lower()    
 
-    if is_whitelist_language(term_lower):
+    if is_allowlist_language(term_lower):
         pos = line.find(term_lower)
 
         if pos >= 3 and line[pos-3:pos] == "```" and (pos + len(term_lower)) == len(line):            
@@ -293,7 +293,7 @@ def classify_occurrence(line, pos_end, term, line_num, filename, code_lines, int
     line_trunc = line[:pos_end]
 
 
-    # Code-fence cases: term is a whitelisted language and is preceded directly by ```        
+    # Code-fence cases: term is a allowed language and is preceded directly by ```        
     if is_codefence(line, term):
         return TAGS["code_fence"]
 
